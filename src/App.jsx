@@ -80,7 +80,10 @@ function App() {
                 >
                   Get Started
                 </button>
-                <button className="border-2 border-white text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-indigo-600 transition">
+                <button 
+                  onClick={() => setView('events')}
+                  className="border-2 border-white text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-indigo-600 transition"
+                >
                   Browse Events
                 </button>
               </div>
@@ -107,6 +110,33 @@ function App() {
                 />
               </div>
             </section>
+          </div>
+        )}
+
+        {/* VIEW: EVENTS PAGE */}
+        {view === 'events' && (
+          <div className="py-20 px-8 max-w-6xl mx-auto">
+            <h1 className="text-4xl font-bold text-center mb-10">Browse Events</h1>
+            <p className="text-center text-gray-600 mb-16">Discover and book tickets for amazing events around the world.</p>
+            
+            {/* Recommended Events Section */}
+            <section className="mb-16">
+              <h2 className="text-2xl font-bold text-center mb-8">Recommended Events</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <EventCategoryCard category="Movies" icon="🎬" description="Book movie tickets" />
+                <EventCategoryCard category="Stand-ups" icon="🎤" description="Comedy shows" />
+                <EventCategoryCard category="Concerts" icon="🎵" description="Live music events" />
+                <EventCategoryCard category="Sports" icon="⚽" description="Sports matches" />
+              </div>
+            </section>
+            
+            {/* All Events Section */}
+            <h2 className="text-2xl font-bold text-center mb-8">All Events</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <EventCard title="Summer Music Festival" date="July 15, 2026" location="Central Park, NY" />
+              <EventCard title="Tech Conference 2026" date="August 20, 2026" location="San Francisco, CA" />
+              <EventCard title="Art Exhibition" date="September 5, 2026" location="Los Angeles, CA" />
+            </div>
           </div>
         )}
 
@@ -145,4 +175,28 @@ const FeatureCard = ({ icon, title, desc }) => (
   </div>
 );
 
-export default App;
+// Reusable Event Card Component
+const EventCard = ({ title, date, location }) => (
+  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+    <h3 className="text-xl font-bold mb-3">{title}</h3>
+    <p className="text-gray-600 mb-2">📅 {date}</p>
+    <p className="text-gray-600 mb-4">📍 {location}</p>
+    <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+      Book Now
+    </button>
+  </div>
+);
+
+// Reusable Event Category Card Component
+const EventCategoryCard = ({ category, icon, description }) => (
+  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300 text-center">
+    <div className="text-4xl mb-4">{icon}</div>
+    <h3 className="text-lg font-bold mb-2">{category}</h3>
+    <p className="text-gray-600 mb-4">{description}</p>
+    <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+      Explore
+    </button>
+  </div>
+);
+
+export default App; 
