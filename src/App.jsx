@@ -29,8 +29,8 @@ function App() {
 
         <div className="hidden md:flex space-x-8 font-medium text-gray-600">
           <button onClick={() => setView('home')} className="hover:text-indigo-600 transition">Home</button>
-          <button className="hover:text-indigo-600 transition">Explore</button>
-          <button className="hover:text-indigo-600 transition">About</button>
+          <button onClick={() => setView('explore')} className="hover:text-indigo-600 transition">Explore</button>
+          <button onClick={() => setView('about')} className="hover:text-indigo-600 transition">About</button>
         </div>
 
         <div className="space-x-4">
