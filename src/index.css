@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* 1. Reset everything to ensure no hidden margins */
+html, 
+body, 
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  /* 2. Prevent horizontal scrollbars */
+  overflow-x: hidden; 
+  /* 3. Match your site's theme */
+  background-color: black; 
+}
+
+/* 4. Ensure images don't cause layout shifts */
+img {
+  display: block;
+  max-width: 100%;
+}
