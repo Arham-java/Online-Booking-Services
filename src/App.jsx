@@ -1,3 +1,7 @@
+// I have not used BrowserRouter, HashRouter, or MemoryRouter. I used state-based conditional rendering instead.
+// You used useState
+// ROUTER  DOM :- 1. Browser Router   2. Hash Router    3. Memeory Router
+
 import React, { useState } from 'react';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
