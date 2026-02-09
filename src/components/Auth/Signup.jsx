@@ -1,61 +1,94 @@
 import React, { useState } from 'react';
+import { FormInput } from '../UI/SharedComponents';
+import { STYLES } from '../../constants';
 
-const Signup = ({ switchToLogin }) => {
+const Signup = ({ switchToLogin, onSignup }) => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [role, setRole] = useState('user'); // 'user' or 'organizer'
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Signup Data:", formData);
-    alert("Account created successfully (Mock)");
+    console.log('Signup:', formData, 'Role:', role);
+    // Pass role to onSignup callback
+    if (onSignup) onSignup(role);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="w-full max-w-md p-8 space-y-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-cyan-500/20">
-        <div>
-          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Create Account</h2>
-        </div>
+    <div className={`flex flex-col items-center justify-center min-h-screen ${STYLES.darkBg}`}>
+      <div className={`w-full max-w-md p-8 space-y-6 ${STYLES.card}`}>
+        {/* Title */}
+        <h2 className={`text-3xl font-bold text-center ${STYLES.gradientText}`}>
+          Create Account
+        </h2>
         <p className="text-center text-slate-400">Join EventSphere today.</p>
-        
+
+        {/* Role Selection */}
+        <div className="flex gap-4">
+          <button 
+            type="button"
+            onClick={() => setRole('user')}
+            className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
+              role === 'user' 
+                ? 'bg-cyan-500 text-white' 
+                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+            }`}
+          >
+            User
+          </button>
+          <button 
+            type="button"
+            onClick={() => setRole('organizer')}
+            className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
+              role === 'organizer' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+            }`}
+          >
+            Organizer
+          </button>
+        </div>
+
+        {/* Form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block mb-2 text-sm font-semibold text-cyan-400">Full Name</label>
-            <input 
-              type="text" 
-              className="w-full px-4 py-3 bg-slate-900 border border-cyan-500/30 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 text-white placeholder-slate-500 transition" 
-              placeholder="Enter your Name "
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2 text-sm font-semibold text-cyan-400">Email Address</label>
-            <input 
-              type="email" 
-              className="w-full px-4 py-3 bg-slate-900 border border-cyan-500/30 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 text-white placeholder-slate-500 transition" 
-              placeholder="mail@gmail.com"
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-2 text-sm font-semibold text-cyan-400">Password</label>
-            <input 
-              type="password" 
-              className="w-full px-4 py-3 bg-slate-900 border border-cyan-500/30 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 text-white placeholder-slate-500 transition" 
-              placeholder="••••••••"
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-              required
-            />
-          </div>
-          <button type="submit" className="w-full py-3 font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg hover:shadow-lg hover:shadow-cyan-500/50 transition duration-300">
-            Sign Up
+          <FormInput 
+            label="Full Name" 
+            placeholder="Your name" 
+            type="text" 
+            value={formData.name}
+            onChange={(e) => handleChange('name', e.target.value)}
+          />
+          <FormInput 
+            label="Email Address" 
+            placeholder="mail@gmail.com" 
+            type="email" 
+            value={formData.email}
+            onChange={(e) => handleChange('email', e.target.value)}
+          />
+          <FormInput 
+            label="Password" 
+            placeholder="••••••••" 
+            type="password" 
+            value={formData.password}
+            onChange={(e) => handleChange('password', e.target.value)}
+          />
+          <button type="submit" className={STYLES.primaryBtn + ' w-full'}>
+            Sign Up as {role === 'user' ? 'User' : 'Organizer'}
           </button>
         </form>
-        
+
+        {/* Login Link */}
         <p className="text-sm text-center text-slate-400">
           Already have an account? 
-          <button onClick={switchToLogin} className="ml-1 font-semibold text-cyan-400 hover:text-cyan-300 transition">Login</button>
+          <button 
+            onClick={switchToLogin} 
+            className="ml-1 font-semibold text-cyan-400 hover:text-cyan-300 transition"
+          >
+            Login
+          </button>
         </p>
       </div>
     </div>

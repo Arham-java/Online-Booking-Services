@@ -1,5 +1,30 @@
 import React from 'react';
-import { FeatureCard, EventCard, EventCategoryCard } from '../components/UI/SharedComponents';
+import { FeatureCard } from '../components/UI/SharedComponents';
+import { STYLES } from '../constants';
+
+const FEATURES = [
+  {
+    title: 'Instant Access',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=250&fit=crop',
+    desc: 'Receive your digital tickets immediately after booking via email.',
+  },
+  {
+    title: 'Secure Payments',
+    image: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400&h=250&fit=crop',
+    desc: 'Your transactions are protected with military-grade encryption.',
+  },
+  {
+    title: 'Global Reach',
+    image: 'https://images.unsplash.com/photo-1524874694410-92386f1c4ab9?w=400&h=250&fit=crop',
+    desc: 'From local workshops to international festivals, we have it all.',
+  },
+];
+
+const HERO_BANNER = {
+  image: 'https://images.unsplash.com/photo-1520975913728-6a260f1f06b8?auto=format&fit=crop&w=1600&q=80',
+  title: 'Experience Live Music',
+  description: 'Book your favorite concerts and live performances with exclusive access to the best events.',
+};
 
 const Home = ({ onNavigate }) => {
   return (
@@ -8,7 +33,7 @@ const Home = ({ onNavigate }) => {
       <header className="bg-gradient-to-b from-cyan-600/20 via-transparent to-transparent text-white py-28 px-8 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         <div className="relative z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className={`text-5xl md:text-7xl font-extrabold mb-6 ${STYLES.gradientText}`}>
             Unforgettable Experiences <br /> Start Here
           </h1>
           <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-slate-300 leading-relaxed">
@@ -17,13 +42,13 @@ const Home = ({ onNavigate }) => {
           <div className="flex justify-center gap-4">
             <button 
               onClick={() => onNavigate('signup')} 
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:shadow-cyan-500/50 hover:scale-105 transition transform duration-300"
+              className={STYLES.primaryBtn}
             >
               Get Started
             </button>
             <button 
               onClick={() => onNavigate('events')} 
-              className="border-2 border-cyan-400 text-cyan-400 px-10 py-4 rounded-full font-bold text-lg hover:bg-cyan-400/10 transition duration-300"
+              className={STYLES.secondaryBtn}
             >
               Browse Events
             </button>
@@ -31,25 +56,43 @@ const Home = ({ onNavigate }) => {
         </div>
       </header>
 
-      {/* Feature Cards */}
-      <section className="py-24 px-8 max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Why Choose EventSphere?</h2>
+      {/* Features Section */}
+      <section className={STYLES.section}>
+        <h2 className={`text-4xl font-bold text-center mb-16 ${STYLES.gradientText}`}>
+          Why Choose EventSphere?
+        </h2>
         <div className="grid md:grid-cols-3 gap-10">
-          <FeatureCard 
-            title="Instant Access" 
-            image="https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=250&fit=crop" 
-            desc="Receive your digital tickets immediately after booking via email." 
-          />
-          <FeatureCard 
-            title="Secure Payments" 
-            image="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400&h=250&fit=crop" 
-            desc="Your transactions are protected with military-grade encryption." 
-          />
-          <FeatureCard 
-            title="Global Reach" 
-            image="https://images.unsplash.com/photo-1524874694410-92386f1c4ab9?w=400&h=250&fit=crop" 
-            desc="From local workshops to international festivals, we have it all." 
-          />
+          {FEATURES.map((feature) => (
+            <FeatureCard 
+              key={feature.title}
+              title={feature.title}
+              image={feature.image}
+              desc={feature.desc}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Concert Section */}
+      <section className="py-16 px-8">
+        <div className="max-w-6xl mx-auto">
+          <div 
+            className="relative rounded-2xl overflow-hidden shadow-2xl h-96 bg-cover bg-center"
+            style={{ backgroundImage: `url('${HERO_BANNER.image}')` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex items-center">
+              <div className="pl-8 text-white">
+                <h3 className="text-4xl font-bold mb-4">{HERO_BANNER.title}</h3>
+                <p className="text-xl mb-6 max-w-md">{HERO_BANNER.description}</p>
+                <button 
+                  onClick={() => onNavigate('explore')} 
+                  className={STYLES.primaryBtn}
+                >
+                  Explore Concerts
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -1,11 +1,17 @@
 import React from 'react';
+import { NAVIGATION_ITEMS, STYLES } from '../constants';
 
 const Navbar = ({ isLoggedIn, onLogout, onNavigate }) => {
+  const handleNavigate = (item) => {
+    const view = item.view.toLowerCase();
+    onNavigate(view);
+  };
+
   return (
     <nav className="flex items-center justify-between px-8 py-5 bg-slate-900/80 backdrop-blur-md border-b border-cyan-500/20 sticky top-0 z-50">
       {/* Logo */}
       <div 
-        className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent cursor-pointer tracking-tighter uppercase"
+        className={`text-2xl font-black cursor-pointer tracking-tighter uppercase ${STYLES.gradientText}`}
         onClick={() => onNavigate('home')}
       >
         Event<span className="from-blue-400 to-purple-500 bg-gradient-to-r bg-clip-text">Sphere</span>
@@ -13,15 +19,24 @@ const Navbar = ({ isLoggedIn, onLogout, onNavigate }) => {
 
       {/* Navigation Links */}
       <div className="hidden md:flex space-x-8 font-medium text-slate-300">
-        {['Home', 'Dashboard', 'Explore', 'About Us', 'Contact Us'].map((item) => (
+        {NAVIGATION_ITEMS.map((item) => (
           <button 
-            key={item} 
-            onClick={() => onNavigate(item === 'About Us' ? 'about' : item === 'Contact Us' ? 'contactus' : item.toLowerCase())} 
+            key={item.view} 
+            onClick={() => handleNavigate(item)} 
             className="hover:text-cyan-400 transition duration-300"
           >
-            {item}
+            {item.label}
           </button>
         ))}
+        {/* Dashboard link only shown when logged in */}
+        {isLoggedIn && (
+          <button 
+            onClick={() => onNavigate('dashboard')} 
+            className="hover:text-cyan-400 transition duration-300"
+          >
+            Dashboard
+          </button>
+        )}
       </div>
 
       {/* Auth Buttons */}
@@ -30,13 +45,13 @@ const Navbar = ({ isLoggedIn, onLogout, onNavigate }) => {
           <>
             <button 
               onClick={() => onNavigate('login')} 
-              className="text-cyan-400 font-semibold px-4 py-2 hover:bg-cyan-400/10 rounded-lg transition duration-300"
+              className={STYLES.textBtn}
             >
               Login
             </button>
             <button 
               onClick={() => onNavigate('signup')} 
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition duration-300"
+              className={STYLES.primaryBtn}
             >
               Sign Up
             </button>
