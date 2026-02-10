@@ -9,25 +9,39 @@ const COMPANY_VALUES = [
 
 const About = ({ onNavigate }) => {
   return (
-    <div className="py-20 px-8 max-w-6xl mx-auto">
-      {/* Header */}
-      <h1 className={`text-5xl font-bold text-center mb-10 ${STYLES.gradientText}`}>
-        About EventSphere
-      </h1>
-      <p className="text-center text-slate-400 text-lg mb-16 max-w-3xl mx-auto">
-        Learn more about our journey, our vision, and what makes us the leading event booking platform.
-      </p>
+    <div>
+      {/* Hero Section */}
+      <div className="relative text-white py-32 px-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h1 className={`text-5xl font-bold mb-6 ${STYLES.gradientText}`}>
+            About EventSphere
+          </h1>
+          <p className="text-lg text-slate-300 leading-relaxed">
+            Learn more about our journey, our vision, and what makes us the leading event booking platform.
+          </p>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="py-20 px-8 max-w-6xl mx-auto bg-gradient-to-b from-blue-50 to-white">
       
       {/* Story and Values Section */}
       <div className="grid md:grid-cols-2 gap-12 mb-16">
         {/* Our Story */}
         <div className={`${STYLES.card} p-8`}>
-          <h2 className="text-2xl font-bold mb-6 text-cyan-400">Our Story</h2>
-          <p className="text-slate-300 leading-relaxed mb-4">
+          <h2 className="text-2xl font-bold mb-6 text-blue-600">Our Story</h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
             Founded in 2020, EventSphere was born from a simple idea: everyone deserves access to extraordinary experiences. 
             We started as a small team passionate about live events and quickly grew into a global platform.
           </p>
-          <p className="text-slate-300 leading-relaxed">
+          <p className="text-gray-700 leading-relaxed">
             Today, we connect event organizers with attendees across 150+ countries, making it easier than ever to discover 
             and book unforgettable moments.
           </p>
@@ -35,13 +49,13 @@ const About = ({ onNavigate }) => {
 
         {/* Our Values */}
         <div className={`${STYLES.card} p-8`}>
-          <h2 className="text-2xl font-bold mb-6 text-cyan-400">Our Values</h2>
+          <h2 className="text-2xl font-bold mb-6 text-blue-600">Our Values</h2>
           <ul className="space-y-4">
             {COMPANY_VALUES.map((value) => (
               <li key={value.title} className="flex items-start gap-3">
                 <div>
-                  <h3 className="font-bold text-white">{value.title}</h3>
-                  <p className="text-slate-400 text-sm">{value.description}</p>
+                  <h3 className="font-bold text-gray-900">{value.title}</h3>
+                  <p className="text-gray-600 text-sm">{value.description}</p>
                 </div>
               </li>
             ))}
@@ -50,17 +64,27 @@ const About = ({ onNavigate }) => {
       </div>
 
       {/* Call to Action Section */}
-      <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-500/30 text-white p-12 rounded-2xl text-center backdrop-blur-sm">
-        <h2 className="text-3xl font-bold mb-4">Join Millions of Event Lovers</h2>
-        <p className="mb-8 text-lg text-slate-300">
-          Start exploring amazing events today and create unforgettable memories.
-        </p>
-        <button 
-          onClick={() => onNavigate('explore')} 
-          className={STYLES.primaryBtn}
-        >
-          Explore Events Now
-        </button>
+      <div className="relative text-white py-16 px-8 rounded-2xl text-center overflow-hidden mt-8"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/70"></div>
+        <div className="relative z-10">
+          <h2 className="text-3xl font-bold mb-4">Join Millions of Event Lovers</h2>
+          <p className="mb-8 text-lg text-gray-100">
+            Start exploring amazing events today and create unforgettable memories.
+          </p>
+          <button 
+            onClick={() => onNavigate('explore')} 
+            className={STYLES.primaryBtn}
+          >
+            Explore Events Now
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   );

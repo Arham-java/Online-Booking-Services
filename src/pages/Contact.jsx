@@ -35,14 +35,28 @@ const Contact = ({ onNavigate }) => {
   };
 
   return (
-    <div className="py-20 px-8 max-w-6xl mx-auto">
-      {/* Header */}
-      <h1 className={`text-5xl font-bold text-center mb-10 ${STYLES.gradientText}`}>
-        Contact Us
-      </h1>
-      <p className="text-center text-slate-400 text-lg mb-16 max-w-3xl mx-auto">
-        Have questions? We'd love to hear from you.
-      </p>
+    <div>
+      {/* Hero Section */}
+      <div className="relative text-white py-32 px-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h1 className="text-5xl font-bold mb-6 text-white">
+            Contact Us
+          </h1>
+          <p className="text-lg text-gray-100">
+            Have questions? We'd love to hear from you.
+          </p>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="py-20 px-8 max-w-6xl mx-auto bg-gradient-to-b from-blue-50 to-white">
 
       {/* Contact Information Cards */}
       <div className="grid md:grid-cols-3 gap-8 mb-16">
@@ -59,7 +73,7 @@ const Contact = ({ onNavigate }) => {
 
       {/* Contact Form */}
       <div className={`${STYLES.card} p-12 max-w-2xl mx-auto`}>
-        <h2 className="text-2xl font-bold mb-8 text-cyan-400">Send us a Message</h2>
+        <h2 className="text-2xl font-bold mb-8 text-blue-600">Send us a Message</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <FormInput 
             label="Full Name" 
@@ -95,12 +109,13 @@ const Contact = ({ onNavigate }) => {
           </div>
           <button 
             type="submit" 
-            className={STYLES.primaryBtn + ' w-full'}
+            className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300"
           >
             Send Message
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };

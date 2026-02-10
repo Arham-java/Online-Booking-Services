@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* 1. Reset everything to ensure no hidden margins */
+/* Reset everything to ensure no hidden margins */
 html, 
 body, 
 #root {
@@ -8,13 +8,11 @@ body,
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  /* 2. Prevent horizontal scrollbars */
   overflow-x: hidden; 
-  /* 3. Match your site's theme */
-  background-color: black; 
+  background-color: white;
 }
 
-/* 4. Ensure images don't cause layout shifts */
+/* Ensure images don't cause layout shifts */
 img {
   display: block;
   max-width: 100%;
@@ -72,12 +70,4 @@ img {
 .img-hover-zoom:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
-}
-
-/* Grid pattern background */
-.bg-grid-pattern {
-  background-image: 
-    linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
 }

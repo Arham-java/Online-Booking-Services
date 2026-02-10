@@ -11,38 +11,38 @@ import {
 // Small reusable UI pieces
 const Section = ({ title, children }) => (
   <section className="mb-8">
-    <h3 className="text-xl font-bold mb-4">{title}</h3>
+    <h3 className="text-xl font-bold mb-4 text-blue-600">{title}</h3>
     {children}
   </section>
 );
 
 // ---------- User Dashboard Components ----------
 const UserProfileCard = ({ profile, onEdit }) => (
-  <div className="card-var p-4 rounded-lg shadow">
+  <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
     <div className="flex items-center gap-4">
-      <div className="w-20 h-20 bg-slate-200/10 rounded-full flex items-center justify-center text-xl font-bold">{profile.name[0]}</div>
+      <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-600">{profile.name[0]}</div>
       <div>
-        <div className="font-semibold">{profile.name}</div>
-        <div className="text-sm text-muted">{profile.email}</div>
-        <div className="text-sm text-muted">{profile.phone}</div>
+        <div className="font-semibold text-gray-900">{profile.name}</div>
+        <div className="text-sm text-gray-600">{profile.email}</div>
+        <div className="text-sm text-gray-600">{profile.phone}</div>
       </div>
       <div className="ml-auto">
-        <button onClick={onEdit} className="btn-primary-var px-3 py-1 rounded">Edit Profile</button>
+        <button onClick={onEdit} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit Profile</button>
       </div>
     </div>
   </div>
 );
 
 const BookingItem = ({ b, onCancel, onReschedule }) => (
-  <div className="card-var p-3 rounded-lg border flex items-center justify-between">
+  <div className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
     <div>
-      <div className="font-semibold">{b.event}</div>
-      <div className="text-sm text-muted">{b.date} • {b.venue}</div>
-      <div className="text-xs text-muted mt-1">Status: <span className="font-medium">{b.status}</span></div>
+      <div className="font-semibold text-gray-900">{b.event}</div>
+      <div className="text-sm text-gray-600">{b.date} • {b.venue}</div>
+      <div className="text-xs text-gray-600 mt-1">Status: <span className="font-medium">{b.status}</span></div>
     </div>
     <div className="flex gap-2">
-      <button onClick={() => onReschedule(b)} className="btn-outline-var px-3 py-1 rounded">Reschedule</button>
-      <button onClick={() => onCancel(b)} className="px-3 py-1 bg-red-500 text-white rounded">Cancel</button>
+      <button onClick={() => onReschedule(b)} className="border border-blue-600 text-blue-600 px-3 py-1 rounded hover:bg-blue-50">Reschedule</button>
+      <button onClick={() => onCancel(b)} className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Cancel</button>
     </div>
   </div>
 );
@@ -50,14 +50,14 @@ const BookingItem = ({ b, onCancel, onReschedule }) => (
 const PaymentsList = ({ payments, onDownload }) => (
   <div className="space-y-3">
     {payments.map(p => (
-      <div key={p.id} className="card-var p-3 rounded-lg border flex items-center justify-between">
+      <div key={p.id} className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
         <div>
-          <div className="font-medium">{p.description}</div>
-          <div className="text-sm text-muted">{p.date} • {p.method}</div>
+          <div className="font-medium text-gray-900">{p.description}</div>
+          <div className="text-sm text-gray-600">{p.date} • {p.method}</div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="font-semibold">{p.amount}</div>
-          <button onClick={() => onDownload(p)} className="btn-primary-var px-3 py-1 rounded">Download</button>
+          <div className="font-semibold text-gray-900">{p.amount}</div>
+          <button onClick={() => onDownload(p)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Download</button>
         </div>
       </div>
     ))}
@@ -101,7 +101,7 @@ const UserDashboard = ({ onNavigate }) => {
           <Section title="Notifications">
             <div className="space-y-2">
               {mockNotifications.map(n => (
-                <div key={n.id} className="card-var p-2 rounded text-sm">{n.text}</div>
+                <div key={n.id} className="bg-white p-2 rounded text-sm border border-gray-200 text-gray-900">{n.text}</div>
               ))}
             </div>
           </Section>
@@ -110,14 +110,14 @@ const UserDashboard = ({ onNavigate }) => {
         <div className="lg:col-span-2">
           <Section title="Search & Browse Services">
             <div className="flex gap-2 mb-4">
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search events, city..." className="flex-1 p-3 rounded border bg-transparent text-inherit" />
-              <button onClick={() => setQuery('')} className="btn-outline-var px-4 py-2 rounded">Clear</button>
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search events, city..." className="flex-1 p-3 rounded border border-gray-200 bg-white text-gray-900" />
+              <button onClick={() => setQuery('')} className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50">Clear</button>
             </div>
             <div className="grid md:grid-cols-2 gap-3">
               {filteredEvents.map(ev => (
-                <div key={ev.id} className="card-var p-3 rounded border">
-                  <div className="font-semibold">{ev.title}</div>
-                  <div className="text-sm text-muted">{ev.city} • {ev.date}</div>
+                <div key={ev.id} className="bg-white p-3 rounded border border-gray-200">
+                  <div className="font-semibold text-gray-900">{ev.title}</div>
+                  <div className="text-sm text-gray-600">{ev.city} • {ev.date}</div>
                 </div>
               ))}
             </div>
@@ -125,11 +125,11 @@ const UserDashboard = ({ onNavigate }) => {
 
           <Section title="My Bookings">
             <div className="space-y-3">
-              <div className="text-sm text-muted mb-2">Upcoming</div>
-              {upcoming.length ? upcoming.map(b => <BookingItem key={b.id} b={b} onCancel={handleCancel} onReschedule={handleReschedule} />) : <div className="text-sm text-muted">No upcoming bookings</div>}
+              <div className="text-sm text-gray-600 mb-2">Upcoming</div>
+              {upcoming.length ? upcoming.map(b => <BookingItem key={b.id} b={b} onCancel={handleCancel} onReschedule={handleReschedule} />) : <div className="text-sm text-gray-600">No upcoming bookings</div>}
 
-              <div className="text-sm text-muted mt-4 mb-2">Past</div>
-              {past.length ? past.map(b => <BookingItem key={b.id} b={b} onCancel={handleCancel} onReschedule={handleReschedule} />) : <div className="text-sm text-muted">No past bookings</div>}
+              <div className="text-sm text-gray-600 mt-4 mb-2">Past</div>
+              {past.length ? past.map(b => <BookingItem key={b.id} b={b} onCancel={handleCancel} onReschedule={handleReschedule} />) : <div className="text-sm text-gray-600">No past bookings</div>}
             </div>
           </Section>
 
@@ -138,9 +138,9 @@ const UserDashboard = ({ onNavigate }) => {
           </Section>
 
           <Section title="Support & Help">
-            <div className="card-var p-4 rounded border">
-              <div className="mb-2">FAQ: Check our help center for common questions.</div>
-              <button onClick={() => alert('Open chat (mock)')} className="btn-primary-var px-4 py-2 rounded">Chat Support</button>
+            <div className="bg-white p-4 rounded border border-gray-200">
+              <div className="mb-2 text-gray-900">FAQ: Check our help center for common questions.</div>
+              <button onClick={() => alert('Open chat (mock)')} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Chat Support</button>
             </div>
           </Section>
         </div>
@@ -148,11 +148,11 @@ const UserDashboard = ({ onNavigate }) => {
 
       {editOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="card-var p-6 rounded shadow max-w-md w-full">
-            <h4 className="font-semibold mb-3">Edit Profile (mock)</h4>
-            <p className="text-sm text-muted mb-4">This is a mock profile editor. Implement real form to persist changes.</p>
+          <div className="bg-white p-6 rounded shadow max-w-md w-full">
+            <h4 className="font-semibold mb-3 text-gray-900">Edit Profile (mock)</h4>
+            <p className="text-sm text-gray-600 mb-4">This is a mock profile editor. Implement real form to persist changes.</p>
             <div className="flex justify-end gap-2">
-              <button onClick={() => setEditOpen(false)} className="px-4 py-2 rounded border">Close</button>
+              <button onClick={() => setEditOpen(false)} className="px-4 py-2 rounded border border-gray-200 text-gray-900 hover:bg-gray-50">Close</button>
             </div>
           </div>
         </div>
@@ -163,22 +163,22 @@ const UserDashboard = ({ onNavigate }) => {
 
 // ---------- Organizer Dashboard Components ----------
 const OrganizerProfileCard = ({ profile, business, verified }) => (
-  <div className="bg-white text-slate-900 p-4 rounded shadow border">
+  <div className="bg-white text-gray-900 p-4 rounded shadow border border-gray-200">
     <div className="font-semibold">{business.name}</div>
-    <div className="text-sm text-slate-600">{business.email}</div>
-    <div className="text-sm text-slate-600">Status: {verified ? 'Verified' : 'Unverified'}</div>
+    <div className="text-sm text-gray-600">{business.email}</div>
+    <div className="text-sm text-gray-600">Status: {verified ? 'Verified' : 'Unverified'}</div>
   </div>
 );
 
 const ListingItem = ({ item, onEdit, onDelete }) => (
-  <div className="bg-white p-3 rounded border flex items-center justify-between">
+  <div className="bg-white p-3 rounded border border-gray-200 flex items-center justify-between">
     <div>
-      <div className="font-medium">{item.title}</div>
-      <div className="text-sm text-slate-600">{item.date} • {item.city}</div>
+      <div className="font-medium text-gray-900">{item.title}</div>
+      <div className="text-sm text-gray-600">{item.date} • {item.city}</div>
     </div>
     <div className="flex gap-2">
-      <button onClick={() => onEdit(item)} className="px-3 py-1 bg-yellow-400 rounded">Edit</button>
-      <button onClick={() => onDelete(item)} className="px-3 py-1 bg-red-500 text-white rounded">Delete</button>
+      <button onClick={() => onEdit(item)} className="px-3 py-1 bg-yellow-400 text-gray-900 rounded hover:bg-yellow-500">Edit</button>
+      <button onClick={() => onDelete(item)} className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
     </div>
   </div>
 );
@@ -208,10 +208,10 @@ const OrganizerDashboard = ({ onNavigate }) => {
           </Section>
 
           <Section title="Payment & Earnings">
-            <div className="bg-white p-3 rounded border">
-              <div className="font-semibold">Total Earnings</div>
-              <div className="text-2xl mt-2">{earnings.total}</div>
-              <div className="text-sm text-slate-600 mt-1">Pending: {earnings.pending}</div>
+            <div className="bg-white p-3 rounded border border-gray-200">
+              <div className="font-semibold text-gray-900">Total Earnings</div>
+              <div className="text-2xl mt-2 text-blue-600">{earnings.total}</div>
+              <div className="text-sm text-gray-600 mt-1">Pending: {earnings.pending}</div>
             </div>
           </Section>
         </div>
@@ -219,9 +219,9 @@ const OrganizerDashboard = ({ onNavigate }) => {
         <div className="lg:col-span-2">
           <Section title="Create & Manage Listings">
             <div className="flex justify-between mb-3">
-              <div className="text-sm text-slate-400">Your listings</div>
+              <div className="text-sm text-gray-600">Your listings</div>
               <div>
-                <button onClick={handleAdd} className="px-3 py-1 bg-cyan-600 text-white rounded">Add Listing</button>
+                <button onClick={handleAdd} className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Add Listing</button>
               </div>
             </div>
             <div className="space-y-3">
@@ -232,14 +232,14 @@ const OrganizerDashboard = ({ onNavigate }) => {
           <Section title="Booking Management">
             <div className="space-y-3">
               {mockBookings.map(b => (
-                <div key={b.id} className="bg-white p-3 rounded border flex items-center justify-between">
+                <div key={b.id} className="bg-white p-3 rounded border border-gray-200 flex items-center justify-between">
                   <div>
-                    <div className="font-semibold">{b.event}</div>
-                    <div className="text-sm text-slate-600">{b.date} • {b.venue}</div>
+                    <div className="font-semibold text-gray-900">{b.event}</div>
+                    <div className="text-sm text-gray-600">{b.date} • {b.venue}</div>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => alert(`Approve ${b.id} (mock)`)} className="px-3 py-1 bg-green-500 text-white rounded">Approve</button>
-                    <button onClick={() => alert(`Reject ${b.id} (mock)`)} className="px-3 py-1 bg-red-500 text-white rounded">Reject</button>
+                    <button onClick={() => alert(`Approve ${b.id} (mock)`)} className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">Approve</button>
+                    <button onClick={() => alert(`Reject ${b.id} (mock)`)} className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Reject</button>
                   </div>
                 </div>
               ))}
@@ -247,10 +247,10 @@ const OrganizerDashboard = ({ onNavigate }) => {
           </Section>
 
           <Section title="Analytics & Reports">
-            <div className="bg-white p-4 rounded border">
-              <div className="text-sm text-slate-600">Total bookings: {platformStats.totalBookings}</div>
-              <div className="text-sm text-slate-600">Total revenue (platform): {platformStats.totalRevenue}</div>
-              <div className="mt-3 text-sm text-slate-500">(Graphs/Charts can be added here)</div>
+            <div className="bg-white p-4 rounded border border-gray-200">
+              <div className="text-sm text-gray-600">Total bookings: {platformStats.totalBookings}</div>
+              <div className="text-sm text-gray-600">Total revenue (platform): {platformStats.totalRevenue}</div>
+              <div className="mt-3 text-sm text-gray-500">(Graphs/Charts can be added here)</div>
             </div>
           </Section>
         </div>
@@ -262,14 +262,38 @@ const OrganizerDashboard = ({ onNavigate }) => {
 // Main wrapper that shows either User or Organizer dashboard depending on role
 const Dashboard = ({ onNavigate, userRole = 'user' }) => {
   return (
-    <div className="min-h-[70vh] p-6 bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Dashboard</h2>
-          <div className="text-sm text-slate-400">Logged in as: <span className="font-semibold capitalize">{userRole}</span></div>
+    <div>
+      {/* Hero Section */}
+      <div className="relative text-white py-32 px-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h1 className="text-5xl font-bold mb-4 text-white">
+            {userRole === 'user' ? 'My Dashboard' : 'Organizer Dashboard'}
+          </h1>
+          <p className="text-lg text-gray-100">
+            {userRole === 'user' 
+              ? 'Manage your bookings, explore events, and track payments'
+              : 'Create, manage, and analyze your events'}
+          </p>
         </div>
+      </div>
 
-        {userRole === 'user' ? <UserDashboard onNavigate={onNavigate} /> : <OrganizerDashboard onNavigate={onNavigate} />}
+      {/* Dashboard Content */}
+      <div className="min-h-[70vh] p-6 bg-gradient-to-b from-blue-50 to-gray-50 text-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+            <div className="text-sm text-gray-600">Logged in as: <span className="font-semibold capitalize">{userRole}</span></div>
+          </div>
+
+          {userRole === 'user' ? <UserDashboard onNavigate={onNavigate} /> : <OrganizerDashboard onNavigate={onNavigate} />}
+        </div>
       </div>
     </div>
   );

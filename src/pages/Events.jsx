@@ -17,18 +17,32 @@ const ALL_EVENTS = [
 
 const Events = ({ onNavigate }) => {
   return (
-    <div className="py-20 px-8 max-w-6xl mx-auto">
-      {/* Header */}
-      <h1 className={`text-4xl font-bold text-center mb-10 ${STYLES.gradientText}`}>
-        Browse Events
-      </h1>
-      <p className="text-center text-slate-400 mb-16">
-        Discover and book tickets for amazing events around the world.
-      </p>
+    <div>
+      {/* Hero Section */}
+      <div className="relative text-white py-32 px-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h1 className="text-4xl font-bold mb-6 text-white">
+            Browse Events
+          </h1>
+          <p className="text-lg text-gray-100">
+            Discover and book tickets for amazing events around the world.
+          </p>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="py-20 px-8 max-w-6xl mx-auto bg-gradient-to-b from-blue-50 to-white">
       
       {/* Recommended Events Section */}
       <section className="mb-16">
-        <h2 className="text-2xl font-bold text-center mb-8 text-cyan-400">Recommended Events</h2>
+        <h2 className="text-2xl font-bold text-center mb-8 text-blue-600">Recommended Events</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {RECOMMENDED_EVENTS.map((event) => (
             <EventCategoryCard 
@@ -44,7 +58,7 @@ const Events = ({ onNavigate }) => {
       
       {/* All Events Section */}
       <section>
-        <h2 className="text-2xl font-bold text-center mb-8 text-cyan-400">All Events</h2>
+        <h2 className="text-2xl font-bold text-center mb-8 text-blue-600">All Events</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {ALL_EVENTS.map((event) => (
             <EventCard 
@@ -57,6 +71,7 @@ const Events = ({ onNavigate }) => {
           ))}
         </div>
       </section>
+    </div>
     </div>
   );
 };

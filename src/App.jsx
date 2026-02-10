@@ -11,15 +11,15 @@ import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import { STYLES } from './constants';
 
-// Map views to their corresponding components
-const VIEWS = {
+// Map all view names to components
+const VIEW_COMPONENTS = {
   home: Home,
   explore: Explore,
   events: Events,
   about: About,
-  aboutus: About, // Alias for about
+  aboutus: About,
   contact: Contact,
-  contactus: Contact, // Alias for contact
+  contactus: Contact,
   dashboard: Dashboard,
   login: Login,
   signup: Signup,
@@ -28,70 +28,60 @@ const VIEWS = {
 function App() {
   const [view, setView] = useState('home');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null); // 'user' or 'organizer'
+  const [userRole, setUserRole] = useState(null);
 
-  // Handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserRole(null);
-    setView('home'); // Go back to home page
+    setView('home');
   };
 
-  // Handle successful login
   const handleLogin = (role) => {
-    setUserRole(role); // Set user role
+    setUserRole(role);
     setIsLoggedIn(true);
     setView('dashboard');
   };
 
-  // Handle successful signup
   const handleSignup = (role) => {
-    setUserRole(role); // Set organizer role
+    setUserRole(role);
     setIsLoggedIn(true);
     setView('dashboard');
   };
 
-  // Get the component for the current view
-  const ViewComponent = VIEWS[view];
+  const CurrentComponent = VIEW_COMPONENTS[view];
 
-  return (
-    <div className={STYLES.darkBg}>
-      <Navbar 
-        isLoggedIn={isLoggedIn} 
-        onLogout={handleLogout} 
-        onNavigate={setView} 
-      />
-
-      <main>
-        {isLoggedIn ? (
-          view === 'dashboard' ? (
+  // If user is logged in, show dashboard or other pages
+  if (isLoggedIn) {
+    return (
+      <div className={STYLES.darkBg}>
+        <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onNavigate={setView} />
+        <main>
+          {view === 'dashboard' ? (
             <Dashboard onNavigate={setView} userRole={userRole} />
           ) : (
-            ViewComponent && <ViewComponent onNavigate={setView} />
-          )
-        ) : (
-          <>
-            {/* Show login/signup forms when not logged in */}
-            {view === 'login' && (
-              <Login 
-                switchToSignup={() => setView('signup')} 
-                onLogin={handleLogin} 
-              />
-            )}
-            {view === 'signup' && (
-              <Signup 
-                switchToLogin={() => setView('login')} 
-                onSignup={handleSignup} 
-              />
-            )}
-            {/* Show other public pages */}
-            {view !== 'login' && view !== 'signup' && ViewComponent && (
-              <ViewComponent onNavigate={setView} />
-            )}
-          </>
+            CurrentComponent && <CurrentComponent onNavigate={setView} />
+          )}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If user is not logged in, show public pages or auth forms
+  return (
+    <div className={STYLES.darkBg}>
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onNavigate={setView} />
+      <main>
+        {view === 'login' && (
+          <Login switchToSignup={() => setView('signup')} onLogin={handleLogin} />
+        )}
+        {view === 'signup' && (
+          <Signup switchToLogin={() => setView('login')} onSignup={handleSignup} />
+        )}
+        {view !== 'login' && view !== 'signup' && CurrentComponent && (
+          <CurrentComponent onNavigate={setView} />
         )}
       </main>
-
       <Footer />
     </div>
   );

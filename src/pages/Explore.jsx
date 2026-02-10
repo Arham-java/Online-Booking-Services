@@ -21,18 +21,32 @@ const CATEGORY_IMAGES = {
 
 const Explore = ({ onNavigate }) => {
   return (
-    <div className="py-20 px-8 max-w-6xl mx-auto">
-      {/* Header */}
-      <h1 className={`text-5xl font-bold text-center mb-10 ${STYLES.gradientText}`}>
-        Explore Events
-      </h1>
-      <p className="text-center text-slate-400 text-lg mb-16 max-w-3xl mx-auto">
-        Discover thousands of amazing events happening around the world.
-      </p>
+    <div>
+      {/* Hero Section */}
+      <div className="relative text-white py-32 px-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=1600&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <h1 className={`text-5xl font-bold mb-6 ${STYLES.gradientText}`}>
+            Explore Events
+          </h1>
+          <p className="text-lg text-slate-300 leading-relaxed">
+            Discover thousands of amazing events happening around the world.
+          </p>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="py-20 px-8 max-w-6xl mx-auto bg-gradient-to-b from-blue-50 to-white">
       
       {/* Search Section */}
       <div className={`mb-16 ${STYLES.card} p-8`}>
-        <h2 className="text-2xl font-bold mb-6 text-cyan-400">Search Events</h2>
+        <h2 className="text-2xl font-bold mb-6 text-blue-600">Search Events</h2>
         <div className="grid md:grid-cols-3 gap-4">
           <input 
             type="text" 
@@ -54,7 +68,7 @@ const Explore = ({ onNavigate }) => {
 
       {/* Browse by Category Section */}
       <section className="mb-16">
-        <h2 className={`text-3xl font-bold text-center mb-12 ${STYLES.gradientText}`}>
+        <h2 className="text-3xl font-bold text-center mb-12 text-blue-600">
           Browse by Category
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -72,7 +86,7 @@ const Explore = ({ onNavigate }) => {
       
       {/* Featured Events Section */}
       <section>
-        <h2 className={`text-3xl font-bold text-center mb-12 ${STYLES.gradientText}`}>
+        <h2 className="text-3xl font-bold text-center mb-12 text-blue-600">
           Featured Events
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -87,6 +101,7 @@ const Explore = ({ onNavigate }) => {
           ))}
         </div>
       </section>
+    </div>
     </div>
   );
 };
