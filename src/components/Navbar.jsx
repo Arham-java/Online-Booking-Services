@@ -3,7 +3,7 @@ import { NAVIGATION_ITEMS, STYLES } from '../constants';
 
 const Navbar = ({ isLoggedIn, onLogout, onNavigate }) => {
   return (
-    <nav className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200 shadow-sm">
       {/* Logo */}
       <button
         onClick={() => onNavigate('home')}

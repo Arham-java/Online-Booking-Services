@@ -4,17 +4,17 @@ import { STYLES } from '../constants';
 const FEATURES = [
   {
     title: 'Instant Access',
-    emoji: '📱',
+    // emoji: '📱',
     desc: 'Receive your digital tickets immediately after booking via email.',
   },
   {
     title: 'Secure Payments',
-    emoji: '🔒',
+    // emoji: '🔒',
     desc: 'Your transactions are protected with military-grade encryption.',
   },
   {
     title: 'Global Reach',
-    emoji: '🌍',
+    // emoji: '🌍',
     desc: 'From local workshops to international festivals, we have it all.',
   },
 ];
