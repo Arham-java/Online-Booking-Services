@@ -4,7 +4,7 @@ import { EVENT_CATEGORIES, STYLES } from '../constants';
 import { getEventsCall, bookEventCall } from '../services/api';
 import { generateDummyEvents } from '../dummyEvents';
 
-const FEATURED_EVENTS = [
+var FEATURED_EVENTS = [
   { title: 'Summer Music Festival', image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=400&h=300&fit=crop', date: 'July 15, 2026', location: 'Central Park, NY' },
   { title: 'Tech Conference 2026', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop', date: 'August 20, 2026', location: 'San Francisco, CA' },
   { title: 'Art Exhibition', image: 'https://images.unsplash.com/photo-1578301978162-7aae4d755744?w=400&h=300&fit=crop', date: 'September 5, 2026', location: 'Los Angeles, CA' },
@@ -13,7 +13,7 @@ const FEATURED_EVENTS = [
   { title: 'Winter Music Fest', image: 'https://images.unsplash.com/photo-1514989940723-e8d76fb8727b?w=400&h=300&fit=crop', date: 'December 20, 2026', location: 'Miami, FL' },
 ];
 
-const CATEGORY_IMAGES = {
+var CATEGORY_IMAGES = {
   'Concerts': 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=300&fit=crop',
   'Sports': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&h=300&fit=crop',
   'Movies': 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=300&fit=crop',
@@ -21,21 +21,21 @@ const CATEGORY_IMAGES = {
   'Workshops': 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=300&fit=crop',
 };
 
-const Explore = ({ onNavigate }) => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeSearch, setActiveSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+function Explore({ onNavigate }) {
+  var [events, setEvents] = useState([]);
+  var [loading, setLoading] = useState(true);
+  var [searchQuery, setSearchQuery] = useState('');
+  var [activeSearch, setActiveSearch] = useState('');
+  var [selectedCategory, setSelectedCategory] = useState('All Categories');
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    async function fetchEvents() {
       try {
-        const data = await getEventsCall();
-        const dummyData = generateDummyEvents();
+        var data = await getEventsCall();
+        var dummyData = generateDummyEvents();
         setEvents([...data, ...dummyData]);
       } catch (error) {
-        console.error('Failed to fetch events', error);
+        console.log('Failed to fetch events', error);
       } finally {
         setLoading(false);
       }
@@ -43,7 +43,7 @@ const Explore = ({ onNavigate }) => {
     fetchEvents();
   }, []);
 
-  const handleBook = async (eventId) => {
+  async function handleBook(eventId) {
     if (String(eventId).startsWith('dummy-')) {
        alert('Booking and payment successful! Your seat is securely confirmed for this event.');
        setEvents(prevEvents => prevEvents.map(ev => 
@@ -55,11 +55,11 @@ const Explore = ({ onNavigate }) => {
     try {
       await bookEventCall(eventId, 1);
       alert('Booking and payment successful! Your seat is confirmed.');
-      const data = await getEventsCall();
-      const dummyData = generateDummyEvents();
+      var data = await getEventsCall();
+      var dummyData = generateDummyEvents();
       setEvents([...data, ...dummyData]);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert(error.response?.data?.message || 'Failed to book event. Please try logging in again.');
       if (error.response?.status === 401) {
         onNavigate('login');
@@ -67,8 +67,8 @@ const Explore = ({ onNavigate }) => {
     }
   };
 
-  const handleSearchClick = () => {
-    let query = searchQuery;
+  function handleSearchClick() {
+    var query = searchQuery;
     if (selectedCategory !== 'All Categories') {
       query = searchQuery + ' ' + selectedCategory; // basic mockup of combined search since backend lacks category
     }
@@ -76,11 +76,11 @@ const Explore = ({ onNavigate }) => {
     document.getElementById('events-list-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleCategoryExplore = (cat) => {
+  function handleCategoryExplore(cat) {
     onNavigate('category', cat);
   };
 
-  const filteredEvents = events.filter(e => 
+  var filteredEvents = events.filter(e => 
     e.title.toLowerCase().includes(activeSearch.toLowerCase()) || 
     (e.description && e.description.toLowerCase().includes(activeSearch.toLowerCase())) ||
     e.location.toLowerCase().includes(activeSearch.toLowerCase())

@@ -3,30 +3,30 @@ import { EventCategoryCard, EventCard } from '../components/UI/SharedComponents'
 import { STYLES } from '../constants';
 import { getEventsCall, bookEventCall } from '../services/api';
 
-const RECOMMENDED_EVENTS = [
+var RECOMMENDED_EVENTS = [
   { name: 'Movies', icon: '🎬', image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=300&fit=crop', desc: 'Book movie tickets' },
   { name: 'Stand-ups', icon: '😂', image: 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=300&h=300&fit=crop', desc: 'Comedy shows' },
   { name: 'Concerts', icon: '🎵', image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=300&fit=crop', desc: 'Live music events' },
   { name: 'Sports', icon: '⚽', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&h=300&fit=crop', desc: 'Sports matches' },
 ];
 
-const ALL_EVENTS = [
+var ALL_EVENTS = [
   { title: 'Summer Music Festival', image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=400&h=300&fit=crop', date: 'July 15, 2026', location: 'Central Park, NY' },
   { title: 'Tech Conference 2026', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop', date: 'August 20, 2026', location: 'San Francisco, CA' },
   { title: 'Art Exhibition', image: 'https://images.unsplash.com/photo-1578301978162-7aae4d755744?w=400&h=300&fit=crop', date: 'September 5, 2026', location: 'Los Angeles, CA' },
 ];
 
-const Events = ({ onNavigate }) => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+function Events({ onNavigate }) {
+  var [events, setEvents] = useState([]);
+  var [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    async function fetchEvents() {
       try {
-        const data = await getEventsCall();
+        var data = await getEventsCall();
         setEvents(data);
       } catch (error) {
-        console.error('Failed to fetch events', error);
+        console.log('Failed to fetch events', error);
       } finally {
         setLoading(false);
       }
@@ -34,15 +34,15 @@ const Events = ({ onNavigate }) => {
     fetchEvents();
   }, []);
 
-  const handleBook = async (eventId) => {
+  async function handleBook(eventId) {
     try {
       await bookEventCall(eventId, 1);
       alert('Booking successful!');
       // Refresh events to show updated available spots
-      const data = await getEventsCall();
+      var data = await getEventsCall();
       setEvents(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert(error.response?.data?.message || 'Failed to book event. Please try logging in again.');
       if (error.response?.status === 401) {
         onNavigate('login');
@@ -50,7 +50,7 @@ const Events = ({ onNavigate }) => {
     }
   };
 
-  const handleCategoryExplore = (cat) => {
+  function handleCategoryExplore(cat) {
     onNavigate('category', cat);
   };
 

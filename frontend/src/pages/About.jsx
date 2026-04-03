@@ -1,13 +1,13 @@
 import React from 'react';
 import { STYLES } from '../constants';
 
-const COMPANY_VALUES = [
+var COMPANY_VALUES = [
   { title: 'Excellence', description: 'We strive for excellence in every interaction' },
   { title: 'Community', description: 'We believe in building strong communities' },
   { title: 'Trust', description: 'Your trust is our most valuable asset' },
 ];
 
-const About = ({ onNavigate }) => {
+function About({ onNavigate }) {
   return (
     <div>
       {/* Hero Section */}

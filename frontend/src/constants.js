@@ -1,16 +1,16 @@
 // Helper function for role button styling
-export const getRoleButtonClass = (isActive, color = 'blue') => {
-  const baseClass = 'flex-1 py-2 px-4 rounded-lg font-semibold transition';
-  const activeClass = color === 'purple' 
+export function getRoleButtonClass(isActive, color = 'blue') {
+  var baseClass = 'flex-1 py-2 px-4 rounded-lg font-semibold transition';
+  var activeClass = color === 'purple' 
     ? 'bg-orange-500 text-white' 
     : 'bg-blue-600 text-white';
-  const inactiveClass = 'bg-gray-200 text-gray-600 hover:bg-gray-300';
+  var inactiveClass = 'bg-gray-200 text-gray-600 hover:bg-gray-300';
   
   return `${baseClass} ${isActive ? activeClass : inactiveClass}`;
 };
 
 // Reusable Tailwind CSS classes
-export const STYLES = {
+export var STYLES = {
   // Card containers
   card: 'bg-white rounded-xl border border-gray-200 hover:shadow-lg transition duration-300',
   cardShadow: 'hover:shadow-xl',
@@ -35,7 +35,7 @@ export const STYLES = {
 };
 
 // Navigation items
-export const NAVIGATION_ITEMS = [
+export var NAVIGATION_ITEMS = [
   { label: 'Home', view: 'home' },
   { label: 'Explore', view: 'explore' },
   { label: 'Events', view: 'events' },
@@ -44,7 +44,7 @@ export const NAVIGATION_ITEMS = [
 ];
 
 // Event categories
-export const EVENT_CATEGORIES = [
+export var EVENT_CATEGORIES = [
   { name: 'Concerts', icon: '🎵' },
   { name: 'Sports', icon: '⚽' },
   { name: 'Movies', icon: '🎬' },

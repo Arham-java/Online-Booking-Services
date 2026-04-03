@@ -2,43 +2,52 @@ import React, { useState } from 'react';
 import { STYLES } from '../../constants';
 
 // Feature card component for homepage
-export const FeatureCard = ({ icon, title, image, desc }) => (
-  <div className={`${STYLES.card} ${STYLES.cardShadow} overflow-hidden flex flex-col`}>
-    <div className="relative h-48 overflow-hidden">
-      <img src={image} alt={title} className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
+function FeatureCard(props) {
+  return (
+    <div className={STYLES.card + ' ' + STYLES.cardShadow + ' overflow-hidden flex flex-col'}>
+      <div className="relative h-48 overflow-hidden">
+        <img src={props.image} alt={props.title} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
+      </div>
+      <div className="p-6 flex-1 flex flex-col">
+        <div className="text-4xl mb-3">{props.icon}</div>
+        <h3 className="text-xl font-bold mb-3 text-blue-600">{props.title}</h3>
+        <p className="text-gray-600 leading-relaxed flex-1">{props.desc}</p>
+      </div>
     </div>
-    <div className="p-6 flex-1 flex flex-col">
-      <div className="text-4xl mb-3">{icon}</div>
-      <h3 className="text-xl font-bold mb-3 text-blue-600">{title}</h3>
-      <p className="text-gray-600 leading-relaxed flex-1">{desc}</p>
-    </div>
-  </div>
-);
+  );
+}
 
 // Payment Modal Component
-export const PaymentModal = ({ isOpen, onClose, onConfirm, price, title }) => {
-  if (!isOpen) return null;
+function PaymentModal(props) {
+  if (props.isOpen == false) {
+    return null;
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    props.onConfirm();
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-fadeIn">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Checkout</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={props.onClose} className="text-gray-400 hover:text-gray-600">
             ✕
           </button>
         </div>
         
         <div className="mb-6 p-4 bg-blue-50 rounded-lg">
           <p className="text-sm text-blue-600 font-semibold mb-1">Booking Event</p>
-          <p className="font-bold text-gray-900">{title}</p>
-          {price !== undefined && (
-            <p className="mt-2 text-xl font-bold text-blue-600">Total: ${price}</p>
+          <p className="font-bold text-gray-900">{props.title}</p>
+          {props.price !== undefined && (
+            <p className="mt-2 text-xl font-bold text-blue-600">Total: ${props.price}</p>
           )}
         </div>
 
-        <form onSubmit={(e) => { e.preventDefault(); onConfirm(); }}>
+        <form onSubmit={handleFormSubmit}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Cardholder Name</label>
@@ -67,106 +76,146 @@ export const PaymentModal = ({ isOpen, onClose, onConfirm, price, title }) => {
       </div>
     </div>
   );
-};
+}
 
 // Event card component
-export const EventCard = ({ id, title, image, date, location, price = 50, onBook, availableSpots }) => {
-  const [showPayment, setShowPayment] = useState(false);
+function EventCard(props) {
+  var [showPayment, setShowPayment] = useState(false);
+  var priceToUse = props.price;
+  if (priceToUse === undefined) {
+    priceToUse = 50;
+  }
 
-  const handleBookClick = () => {
-    if (availableSpots > 0 && onBook) {
+  function handleBookClick() {
+    if (props.availableSpots > 0 && props.onBook != null) {
       setShowPayment(true);
     }
-  };
+  }
 
-  const handleConfirmPayment = () => {
+  function handleConfirmPayment() {
     setShowPayment(false);
-    if (onBook) onBook(id);
-  };
+    if (props.onBook != null) {
+      props.onBook(props.id);
+    }
+  }
+
+  var buttonClass = STYLES.primaryBtn + ' mt-auto';
+  if (props.availableSpots === 0) {
+    buttonClass = buttonClass + ' opacity-50 cursor-not-allowed';
+  }
+
+  var imageToUse = props.image;
+  if (!imageToUse) {
+    imageToUse = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80';
+  }
 
   return (
     <>
-      <div className={`${STYLES.card} ${STYLES.cardShadow} overflow-hidden flex flex-col relative`}>
+      <div className={STYLES.card + ' ' + STYLES.cardShadow + ' overflow-hidden flex flex-col relative'}>
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full font-bold text-gray-900 z-10 shadow-sm border border-white/20">
-            ${price}
+            ${priceToUse}
         </div>
         <div className="relative h-48 overflow-hidden">
-          <img src={image || 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80'} alt={title} className="w-full h-full object-cover" />
+          <img src={imageToUse} alt={props.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
         </div>
         <div className="p-6 flex-1 flex flex-col">
-          <h3 className="text-xl font-bold mb-3 text-blue-600">{title}</h3>
+          <h3 className="text-xl font-bold mb-3 text-blue-600">{props.title}</h3>
           <p className="text-gray-600 mb-2 flex items-center gap-2">
-            <span>📅</span> {new Date(date).toLocaleDateString()}
+            <span>📅</span> {new Date(props.date).toLocaleDateString()}
           </p>
           <p className="text-gray-600 mb-2 flex items-center gap-2">
-            <span>📍</span> {location}
+            <span>📍</span> {props.location}
           </p>
-          {availableSpots !== undefined && (
+          {props.availableSpots !== undefined && (
             <p className="text-gray-600 mb-4 flex items-center gap-2 font-medium">
-              <span>🎫</span> {availableSpots > 0 ? `${availableSpots} spots left` : 'Sold out!'}
+              <span>🎫</span> {props.availableSpots > 0 ? props.availableSpots + ' spots left' : 'Sold out!'}
             </p>
           )}
           <button 
             onClick={handleBookClick} 
-            disabled={availableSpots === 0}
-            className={`${STYLES.primaryBtn} mt-auto ${availableSpots === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={props.availableSpots === 0}
+            className={buttonClass}
           >
-            {availableSpots === 0 ? 'Sold Out' : 'Book Now'}
+            {props.availableSpots === 0 ? 'Sold Out' : 'Book Now'}
           </button>
         </div>
       </div>
       <PaymentModal 
         isOpen={showPayment} 
-        onClose={() => setShowPayment(false)} 
+        onClose={function() { setShowPayment(false); }} 
         onConfirm={handleConfirmPayment}
-        price={price}
-        title={title}
+        price={priceToUse}
+        title={props.title}
       />
     </>
   );
-};
+}
 
 // Event category card
-export const EventCategoryCard = ({ category, icon, image, description, onExplore }) => (
-  <div className={`${STYLES.card} ${STYLES.cardShadow} text-center group flex flex-col overflow-hidden`}>
-    <div className="relative h-32 overflow-hidden">
-      <img src={image} alt={category} className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-        <div className="text-4xl group-hover:scale-110 transition duration-300">{icon}</div>
+function EventCategoryCard(props) {
+  function handleExplore() {
+    if (props.onExplore != null) {
+      props.onExplore(props.category);
+    }
+  }
+
+  return (
+    <div className={STYLES.card + ' ' + STYLES.cardShadow + ' text-center group flex flex-col overflow-hidden'}>
+      <div className="relative h-32 overflow-hidden">
+        <img src={props.image} alt={props.category} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+          <div className="text-4xl group-hover:scale-110 transition duration-300">{props.icon}</div>
+        </div>
+      </div>
+      <div className="p-6 flex-1 flex flex-col">
+        <h3 className="text-lg font-bold mb-2 text-blue-600">{props.category}</h3>
+        <p className="text-gray-600 mb-4 flex-1">{props.description}</p>
+        <button onClick={handleExplore} className={STYLES.primaryBtn}>
+          Explore
+        </button>
       </div>
     </div>
-    <div className="p-6 flex-1 flex flex-col">
-      <h3 className="text-lg font-bold mb-2 text-blue-600">{category}</h3>
-      <p className="text-gray-600 mb-4 flex-1">{description}</p>
-      <button onClick={() => onExplore && onExplore(category)} className={STYLES.primaryBtn}>
-        Explore
-      </button>
-    </div>
-  </div>
-);
+  );
+}
 
 // Contact information card
-export const ContactCard = ({ icon, title, details, subtext }) => (
-  <div className={`${STYLES.card} p-8 text-center`}>
-    <div className="text-5xl mb-4">{icon}</div>
-    <h3 className="text-xl font-bold mb-2 text-blue-600">{title}</h3>
-    <p className="text-gray-900 mb-2">{details}</p>
-    <p className="text-gray-600 text-sm">{subtext}</p>
-  </div>
-);
+function ContactCard(props) {
+  return (
+    <div className={STYLES.card + ' p-8 text-center'}>
+      <div className="text-5xl mb-4">{props.icon}</div>
+      <h3 className="text-xl font-bold mb-2 text-blue-600">{props.title}</h3>
+      <p className="text-gray-900 mb-2">{props.details}</p>
+      <p className="text-gray-600 text-sm">{props.subtext}</p>
+    </div>
+  );
+}
 
 // Form input component
-export const FormInput = ({ label, placeholder, type = 'text', value, onChange, required = true }) => (
-  <div>
-    <label className={STYLES.formLabel}>{label}</label>
-    <input 
-      type={type} 
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      className={STYLES.formInput}
-    />
-  </div>
-);
+function FormInput(props) {
+  var typeToUse = props.type;
+  if (typeToUse === undefined) {
+    typeToUse = 'text';
+  }
+  
+  var isRequired = props.required;
+  if (isRequired === undefined) {
+    isRequired = true;
+  }
+
+  return (
+    <div>
+      <label className={STYLES.formLabel}>{props.label}</label>
+      <input 
+        type={typeToUse} 
+        placeholder={props.placeholder}
+        value={props.value}
+        onChange={props.onChange}
+        required={isRequired}
+        className={STYLES.formInput}
+      />
+    </div>
+  );
+}
+
+export { FeatureCard, PaymentModal, EventCard, EventCategoryCard, ContactCard, FormInput };

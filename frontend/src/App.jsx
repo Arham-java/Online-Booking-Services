@@ -14,7 +14,7 @@ import { STYLES } from './constants';
 import { logoutCall } from './services/api';
 
 // Map all view names to components
-const VIEW_COMPONENTS = {
+var VIEW_COMPONENTS = {
   home: Home,
   explore: Explore,
   events: Events,
@@ -29,43 +29,43 @@ const VIEW_COMPONENTS = {
 };
 
 function App() {
-  const [view, setView] = useState('home');
-  const [viewData, setViewData] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
+  var [view, setView] = useState('home');
+  var [viewData, setViewData] = useState(null);
+  var [isLoggedIn, setIsLoggedIn] = useState(false);
+  var [userData, setUserData] = useState(null);
 
-  const handleNavigate = (newView, data = null) => {
+  function handleNavigate(newView, data = null) {
     setView(newView);
     setViewData(data);
   };
 
-  const handleLogout = async () => {
+  async function handleLogout() {
     try {
       await logoutCall();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.log('Logout error:', error);
     }
     setIsLoggedIn(false);
     setUserData(null);
     setView('home');
   };
 
-  const handleLogin = (data) => {
+  function handleLogin(data) {
     // data can be role string or full user object
-    const role = typeof data === 'string' ? data : data.role;
+    var role = typeof data === 'string' ? data : data.role;
     setUserData(typeof data === 'object' ? data : { name: role, email: 'student@college.edu', role });
     setIsLoggedIn(true);
     handleNavigate('dashboard');
   };
 
-  const handleSignup = (data) => {
-    const role = typeof data === 'string' ? data : data.role;
+  function handleSignup(data) {
+    var role = typeof data === 'string' ? data : data.role;
     setUserData(typeof data === 'object' ? data : { name: role, email: 'student@college.edu', role });
     setIsLoggedIn(true);
     handleNavigate('dashboard');
   };
 
-  const CurrentComponent = VIEW_COMPONENTS[view];
+  var CurrentComponent = VIEW_COMPONENTS[view];
 
   // If user is logged in, show dashboard or other pages
   if (isLoggedIn) {

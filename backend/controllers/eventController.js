@@ -3,9 +3,9 @@ import Event from '../models/Event.js';
 // @desc    Get all events
 // @route   GET /api/events
 // @access  Public
-export const getEvents = async (req, res) => {
+export async function getEvents(req, res) {
     try {
-        const events = await Event.find().populate('organizer', 'name email');
+        var events = await Event.find().populate('organizer', 'name email');
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({ message: 'Server error: ' + error.message });
@@ -15,9 +15,9 @@ export const getEvents = async (req, res) => {
 // @desc    Get single event
 // @route   GET /api/events/:id
 // @access  Public
-export const getEventById = async (req, res) => {
+export async function getEventById(req, res) {
     try {
-        const event = await Event.findById(req.params.id).populate('organizer', 'name email');
+        var event = await Event.findById(req.params.id).populate('organizer', 'name email');
         
         if (event) {
             res.status(200).json(event);
@@ -32,11 +32,11 @@ export const getEventById = async (req, res) => {
 // @desc    Create an event
 // @route   POST /api/events
 // @access  Private (Organizer/Admin)
-export const createEvent = async (req, res) => {
+export async function createEvent(req, res) {
     try {
-        const { title, description, date, location, price, totalSpots } = req.body;
+        var { title, description, date, location, price, totalSpots } = req.body;
 
-        const event = new Event({
+        var event = new Event({
             title,
             description,
             date,
@@ -47,7 +47,7 @@ export const createEvent = async (req, res) => {
             organizer: req.user._id
         });
 
-        const createdEvent = await event.save();
+        var createdEvent = await event.save();
         res.status(201).json(createdEvent);
     } catch (error) {
         res.status(500).json({ message: 'Server error: ' + error.message });
@@ -57,9 +57,9 @@ export const createEvent = async (req, res) => {
 // @desc    Update an event
 // @route   PUT /api/events/:id
 // @access  Private (Organizer/Admin)
-export const updateEvent = async (req, res) => {
+export async function updateEvent(req, res) {
     try {
-        const event = await Event.findById(req.params.id);
+        var event = await Event.findById(req.params.id);
 
         if (event) {
             // Check if user is the organizer
@@ -75,12 +75,12 @@ export const updateEvent = async (req, res) => {
             
             // Adjust available spots if total spots changed
             if (req.body.totalSpots) {
-                const diff = req.body.totalSpots - event.totalSpots;
+                var diff = req.body.totalSpots - event.totalSpots;
                 event.totalSpots = req.body.totalSpots;
                 event.availableSpots = event.availableSpots + diff;
             }
 
-            const updatedEvent = await event.save();
+            var updatedEvent = await event.save();
             res.status(200).json(updatedEvent);
         } else {
             res.status(404).json({ message: 'Event not found' });
@@ -93,9 +93,9 @@ export const updateEvent = async (req, res) => {
 // @desc    Delete an event
 // @route   DELETE /api/events/:id
 // @access  Private (Organizer/Admin)
-export const deleteEvent = async (req, res) => {
+export async function deleteEvent(req, res) {
     try {
-        const event = await Event.findById(req.params.id);
+        var event = await Event.findById(req.params.id);
 
         if (event) {
             // Check if user is the organizer

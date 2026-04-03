@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getEventsCall, createEventCall, getMyBookingsCall, getAllBookingsCall } from '../services/api';
 
 // Small reusable UI pieces
-const Section = ({ title, children }) => (
+var Section = ({ title, children }) => (
   <section className="mb-8">
     <h3 className="text-xl font-bold mb-4 text-blue-600">{title}</h3>
     {children}
@@ -10,7 +10,7 @@ const Section = ({ title, children }) => (
 );
 
 // ---------- User Dashboard Components ----------
-const UserProfileCard = ({ profile, userRole, onEdit }) => (
+var UserProfileCard = ({ profile, userRole, onEdit }) => (
   <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
     <div className="flex items-center gap-4">
       <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-600">
@@ -28,7 +28,7 @@ const UserProfileCard = ({ profile, userRole, onEdit }) => (
   </div>
 );
 
-const BookingItem = ({ b }) => (
+var BookingItem = ({ b }) => (
   <div className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
     <div>
       <div className="font-semibold text-gray-900">{b.event?.title || 'Unknown Event'}</div>
@@ -44,18 +44,18 @@ const BookingItem = ({ b }) => (
   </div>
 );
 
-const UserDashboard = ({ onNavigate, userRole, userData }) => {
-  const [editOpen, setEditOpen] = useState(false);
-  const [myBookings, setMyBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+function UserDashboard({ onNavigate, userRole, userData }) {
+  var [editOpen, setEditOpen] = useState(false);
+  var [myBookings, setMyBookings] = useState([]);
+  var [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMyBookings = async () => {
+    async function fetchMyBookings() {
       try {
-        const data = await getMyBookingsCall();
+        var data = await getMyBookingsCall();
         setMyBookings(data);
       } catch (err) {
-        console.error(err);
+        console.log(err);
       } finally {
         setLoading(false);
       }
@@ -112,7 +112,7 @@ const UserDashboard = ({ onNavigate, userRole, userData }) => {
 };
 
 // ---------- Organizer Dashboard Components ----------
-const ListingItem = ({ item }) => (
+var ListingItem = ({ item }) => (
   <div className="bg-white p-3 rounded border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
     <div>
       <div className="font-medium text-gray-900 text-lg">{item.title}</div>
@@ -124,28 +124,28 @@ const ListingItem = ({ item }) => (
   </div>
 );
 
-const OrganizerDashboard = ({ userRole, userData }) => {
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState([]);
-  const [bookings, setBookings] = useState([]);
-  const [addMode, setAddMode] = useState(false);
+function OrganizerDashboard({ userRole, userData }) {
+  var [loading, setLoading] = useState(true);
+  var [events, setEvents] = useState([]);
+  var [bookings, setBookings] = useState([]);
+  var [addMode, setAddMode] = useState(false);
   
-  const [formData, setFormData] = useState({
+  var [formData, setFormData] = useState({
     title: '', description: '', date: '', location: '', price: 0, totalSpots: 100
   });
 
-  const fetchData = async () => {
+  async function fetchData() {
     setLoading(true);
     try {
-      const allEvents = await getEventsCall();
+      var allEvents = await getEventsCall();
       // Simulating "my events" logic on client side since backend doesn't have an exact endpoint. 
       // Actually wait, I added an endpoint? Let me just use getEventsCall and not filter for simplicity in prototype, 
       // OR better, we know the organizer's bookings are filtered in getBookings!
       setEvents(allEvents);
-      const orgBookings = await getAllBookingsCall();
+      var orgBookings = await getAllBookingsCall();
       setBookings(orgBookings);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -155,7 +155,7 @@ const OrganizerDashboard = ({ userRole, userData }) => {
     fetchData();
   }, []);
 
-  const handleAddSubmit = async (e) => {
+  async function handleAddSubmit(e) {
     e.preventDefault();
     try {
       await createEventCall(formData);
@@ -164,16 +164,16 @@ const OrganizerDashboard = ({ userRole, userData }) => {
       setFormData({ title: '', description: '', date: '', location: '', price: 0, totalSpots: 100 });
       fetchData();
     } catch (err) {
-      console.error(err);
+      console.log(err);
       alert(err.response?.data?.message || 'Failed to create event');
     }
   };
 
-  const handleChange = (e) => {
+  function handleChange(e) {
     setFormData(prev => ({...prev, [e.target.name]: e.target.value}));
   };
 
-  const totalEarnings = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+  var totalEarnings = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
   return (
     <div>
@@ -265,7 +265,7 @@ const OrganizerDashboard = ({ userRole, userData }) => {
 };
 
 // Main wrapper
-const Dashboard = ({ onNavigate, userRole = 'user', userData }) => {
+function Dashboard({ onNavigate, userRole = 'user', userData }) {
   return (
     <div>
       {/* Hero Section */}

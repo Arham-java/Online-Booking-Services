@@ -3,22 +3,22 @@ import { FormInput } from '../UI/SharedComponents';
 import { loginCall } from '../../services/api';
 import { STYLES, getRoleButtonClass } from '../../constants';
 
-const Login = ({ switchToSignup, onLogin }) => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [role, setRole] = useState('user');
+function Login({ switchToSignup, onLogin }) {
+  var [formData, setFormData] = useState({ email: '', password: '' });
+  var [role, setRole] = useState('user');
 
-  const handleChange = (field, value) => {
+  function handleChange(field, value) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const data = await loginCall(formData.email, formData.password, role);
+      var data = await loginCall(formData.email, formData.password, role);
       console.log('Login Success:', data);
       if (onLogin) onLogin(data.role || role);
     } catch (error) {
-      console.error('Login Error:', error.response?.data?.message || error.message);
+      console.log('Login Error:', error.response?.data?.message || error.message);
       alert(error.response?.data?.message || 'Invalid credentials');
     }
   };

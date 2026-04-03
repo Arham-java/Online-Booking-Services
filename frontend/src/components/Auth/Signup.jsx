@@ -3,22 +3,22 @@ import { FormInput } from '../UI/SharedComponents';
 import { signupCall } from '../../services/api';
 import { getRoleButtonClass } from '../../constants';
 
-const Signup = ({ switchToLogin, onSignup }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const [role, setRole] = useState('user');
+function Signup({ switchToLogin, onSignup }) {
+  var [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  var [role, setRole] = useState('user');
 
-  const handleChange = (field, value) => {
+  function handleChange(field, value) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const data = await signupCall(formData.name, formData.email, formData.password, role);
+      var data = await signupCall(formData.name, formData.email, formData.password, role);
       console.log('Signup Success:', data);
       if (onSignup) onSignup(data.role || role);
     } catch (error) {
-      console.error('Signup Error:', error.response?.data?.message || error.message);
+      console.log('Signup Error:', error.response?.data?.message || error.message);
       alert(error.response?.data?.message || 'Error occurred during signup');
     }
   };

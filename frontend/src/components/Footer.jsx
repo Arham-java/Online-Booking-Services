@@ -1,12 +1,12 @@
 import React from 'react';
 import { STYLES } from '../constants';
 
-const FOOTER_LINKS = [
+var FOOTER_LINKS = [
   { label: 'Terms', href: '#' },
   { label: 'Privacy', href: '#' },
 ];
 
-const Footer = () => (
+var Footer = () => (
   <footer className="bg-gray-50 border-t border-gray-200 py-12 px-8">
     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-600">
       {/* Logo */}

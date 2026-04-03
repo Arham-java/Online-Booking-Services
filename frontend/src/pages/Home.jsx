@@ -1,7 +1,7 @@
 import React from 'react';
 import { STYLES } from '../constants';
 
-const FEATURES = [
+var FEATURES = [
   {
     title: 'Instant Access',
     // emoji: '📱',
@@ -19,7 +19,7 @@ const FEATURES = [
   },
 ];
 
-const FEATURED_EVENTS = [
+var FEATURED_EVENTS = [
   { 
     title: 'Summer Music Festival', 
     image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=400&h=300&fit=crop', 
@@ -40,8 +40,8 @@ const FEATURED_EVENTS = [
   },
 ];
 
-const Home = ({ onNavigate }) => {
-  const [searchQuery, setSearchQuery] = React.useState('');
+function Home({ onNavigate }) {
+  var [searchQuery, setSearchQuery] = React.useState('');
 
   return (
     <div>

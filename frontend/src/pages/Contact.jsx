@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ContactCard, FormInput } from '../components/UI/SharedComponents';
 import { STYLES } from '../constants';
 
-const CONTACT_INFO = [
+var CONTACT_INFO = [
   { 
     title: 'Email', 
     details: 'himeshjaiswal12@gmail.com helloarham596@gmail.com', 
@@ -20,14 +20,14 @@ const CONTACT_INFO = [
   },
 ];
 
-const Contact = ({ onNavigate }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+function Contact({ onNavigate }) {
+  var [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleChange = (field, value) => {
+  function handleChange(field, value) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
     console.log('Message sent:', formData);
     alert('Thank you for your message! We will be in touch soon.');

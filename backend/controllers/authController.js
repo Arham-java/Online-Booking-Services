@@ -1,8 +1,8 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
-const generateToken = (res, userId) => {
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+function generateToken(res, userId) {
+    var token = jwt.sign({ userId }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     });
 
@@ -17,11 +17,11 @@ const generateToken = (res, userId) => {
 // @desc    Auth user/admin & get token
 // @route   POST /api/auth/login
 // @access  Public
-export const loginUser = async (req, res) => {
-    const { email, password, role } = req.body;
+export async function loginUser(req, res) {
+    var { email, password, role } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        var user = await User.findOne({ email });
 
         if (user && (await user.matchPassword(password))) {
             // Optional: Validate role during login if required. 
@@ -44,17 +44,17 @@ export const loginUser = async (req, res) => {
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
-export const registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
+export async function registerUser(req, res) {
+    var { name, email, password, role } = req.body;
 
     try {
-        const userExists = await User.findOne({ email });
+        var userExists = await User.findOne({ email });
 
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        const user = await User.create({
+        var user = await User.create({
             name,
             email,
             password,
@@ -80,7 +80,7 @@ export const registerUser = async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/auth/logout
 // @access  Public
-export const logoutUser = (req, res) => {
+export function logoutUser(req, res) {
     res.cookie('jwt', '', {
         httpOnly: true,
         expires: new Date(0)
@@ -91,9 +91,9 @@ export const logoutUser = (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/auth/profile
 // @access  Private
-export const getUserProfile = async (req, res) => {
+export async function getUserProfile(req, res) {
     try {
-        const user = await User.findById(req.user._id);
+        var user = await User.findById(req.user._id);
 
         if (user) {
             res.status(200).json({

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const bookingSchema = new mongoose.Schema({
+var bookingSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -29,6 +29,6 @@ const bookingSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Booking = mongoose.model('Booking', bookingSchema);
+var Booking = mongoose.model('Booking', bookingSchema);
 
 export default Booking;

@@ -4,11 +4,11 @@ import Event from '../models/Event.js';
 // @desc    Create new booking
 // @route   POST /api/bookings
 // @access  Private
-export const createBooking = async (req, res) => {
+export async function createBooking(req, res) {
     try {
-        const { eventId, tickets } = req.body;
+        var { eventId, tickets } = req.body;
 
-        const event = await Event.findById(eventId);
+        var event = await Event.findById(eventId);
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
@@ -20,14 +20,14 @@ export const createBooking = async (req, res) => {
         event.availableSpots -= tickets;
         await event.save();
 
-        const booking = new Booking({
+        var booking = new Booking({
             user: req.user._id,
             event: eventId,
             tickets,
             totalPrice: event.price * tickets
         });
 
-        const createdBooking = await booking.save();
+        var createdBooking = await booking.save();
         res.status(201).json(createdBooking);
     } catch (error) {
         res.status(500).json({ message: 'Server error: ' + error.message });
@@ -37,9 +37,9 @@ export const createBooking = async (req, res) => {
 // @desc    Get logged in user bookings
 // @route   GET /api/bookings/mybookings
 // @access  Private
-export const getMyBookings = async (req, res) => {
+export async function getMyBookings(req, res) {
     try {
-        const bookings = await Booking.find({ user: req.user._id }).populate('event');
+        var bookings = await Booking.find({ user: req.user._id }).populate('event');
         res.status(200).json(bookings);
     } catch (error) {
         res.status(500).json({ message: 'Server error: ' + error.message });
@@ -49,14 +49,14 @@ export const getMyBookings = async (req, res) => {
 // @desc    Get all bookings (Admin/Organizer for their events)
 // @route   GET /api/bookings
 // @access  Private (Organizer/Admin)
-export const getBookings = async (req, res) => {
+export async function getBookings(req, res) {
     try {
-        let bookings;
+        var bookings;
         if (req.user.role === 'admin') {
             bookings = await Booking.find().populate('user', 'name email').populate('event');
         } else if (req.user.role === 'organizer') {
-            const events = await Event.find({ organizer: req.user._id });
-            const eventIds = events.map(e => e._id);
+            var events = await Event.find({ organizer: req.user._id });
+            var eventIds = events.map(e => e._id);
             bookings = await Booking.find({ event: { $in: eventIds } }).populate('user', 'name email').populate('event');
         }
         res.status(200).json(bookings);

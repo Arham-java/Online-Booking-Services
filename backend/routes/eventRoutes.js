@@ -2,7 +2,7 @@ import express from 'express';
 import { getEvents, getEventById, createEvent, updateEvent, deleteEvent } from '../controllers/eventController.js';
 import { protect, organizer } from '../middlewares/authMiddleware.js';
 
-const router = express.Router();
+var router = express.Router();
 
 router.route('/')
     .get(getEvents)
