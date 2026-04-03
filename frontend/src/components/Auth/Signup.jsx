@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FormInput } from '../UI/SharedComponents';
+import { signupCall } from '../../services/api';
 import { getRoleButtonClass } from '../../constants';
 
 const Signup = ({ switchToLogin, onSignup }) => {
@@ -10,10 +11,16 @@ const Signup = ({ switchToLogin, onSignup }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Signup:', formData, 'Role:', role);
-    if (onSignup) onSignup(role);
+    try {
+      const data = await signupCall(formData.name, formData.email, formData.password, role);
+      console.log('Signup Success:', data);
+      if (onSignup) onSignup(data.role || role);
+    } catch (error) {
+      console.error('Signup Error:', error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || 'Error occurred during signup');
+    }
   };
 
   return (

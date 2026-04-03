@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventCategoryCard, EventCard } from '../components/UI/SharedComponents';
 import { STYLES } from '../constants';
+import { getEventsCall, bookEventCall } from '../services/api';
 
 const RECOMMENDED_EVENTS = [
   { name: 'Movies', icon: '🎬', image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=300&fit=crop', desc: 'Book movie tickets' },
@@ -16,6 +17,43 @@ const ALL_EVENTS = [
 ];
 
 const Events = ({ onNavigate }) => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await getEventsCall();
+        setEvents(data);
+      } catch (error) {
+        console.error('Failed to fetch events', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const handleBook = async (eventId) => {
+    try {
+      await bookEventCall(eventId, 1);
+      alert('Booking successful!');
+      // Refresh events to show updated available spots
+      const data = await getEventsCall();
+      setEvents(data);
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Failed to book event. Please try logging in again.');
+      if (error.response?.status === 401) {
+        onNavigate('login');
+      }
+    }
+  };
+
+  const handleCategoryExplore = (cat) => {
+    onNavigate('category', cat);
+  };
+
   return (
     <div>
       {/* Hero Section */}
@@ -51,25 +89,35 @@ const Events = ({ onNavigate }) => {
               icon={event.icon}
               image={event.image}
               description={event.desc}
+              onExplore={handleCategoryExplore}
             />
           ))}
         </div>
       </section>
       
       {/* All Events Section */}
-      <section>
-        <h2 className="text-2xl font-bold text-center mb-8 text-blue-600">All Events</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {ALL_EVENTS.map((event) => (
-            <EventCard 
-              key={event.title}
-              title={event.title}
-              image={event.image}
-              date={event.date}
-              location={event.location}
-            />
-          ))}
-        </div>
+      <section id="all-events-section">
+        <h2 className="text-2xl font-bold text-center mb-8 text-blue-600">All Available Events</h2>
+        {loading ? (
+          <div className="text-center py-10">Loading events...</div>
+        ) : events.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">No events found. Check back later!</div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {events.map((event) => (
+              <EventCard 
+                key={event._id}
+                id={event._id}
+                title={event.title}
+                image={event.image || `https://source.unsplash.com/random/400x300/?${encodeURIComponent(event.title)}`}
+                date={event.date}
+                location={event.location}
+                availableSpots={event.availableSpots}
+                onBook={handleBook}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
     </div>

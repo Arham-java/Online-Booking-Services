@@ -18,7 +18,7 @@ const About = ({ onNavigate }) => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-blue-900/80 to-blue-900/40 mix-blend-multiply"></div>
         <div className="relative z-10 max-w-3xl mx-auto">
           <h1 className={`text-5xl font-bold mb-6 ${STYLES.gradientText}`}>
             About EventSphere
@@ -71,7 +71,7 @@ const About = ({ onNavigate }) => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/70"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-blue-900/80 to-blue-800/80 mix-blend-multiply"></div>
         <div className="relative z-10">
           <h2 className="text-3xl font-bold mb-4">Join Millions of Event Lovers</h2>
           <p className="mb-8 text-lg text-gray-100">

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventCategoryCard, EventCard } from '../components/UI/SharedComponents';
 import { EVENT_CATEGORIES, STYLES } from '../constants';
+import { getEventsCall, bookEventCall } from '../services/api';
+import { generateDummyEvents } from '../dummyEvents';
 
 const FEATURED_EVENTS = [
   { title: 'Summer Music Festival', image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=400&h=300&fit=crop', date: 'July 15, 2026', location: 'Central Park, NY' },
@@ -20,6 +22,70 @@ const CATEGORY_IMAGES = {
 };
 
 const Explore = ({ onNavigate }) => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await getEventsCall();
+        const dummyData = generateDummyEvents();
+        setEvents([...data, ...dummyData]);
+      } catch (error) {
+        console.error('Failed to fetch events', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const handleBook = async (eventId) => {
+    if (String(eventId).startsWith('dummy-')) {
+       alert('Booking and payment successful! Your seat is securely confirmed for this event.');
+       setEvents(prevEvents => prevEvents.map(ev => 
+         ev._id === eventId ? { ...ev, availableSpots: Math.max(0, ev.availableSpots - 1) } : ev
+       ));
+       return;
+    }
+
+    try {
+      await bookEventCall(eventId, 1);
+      alert('Booking and payment successful! Your seat is confirmed.');
+      const data = await getEventsCall();
+      const dummyData = generateDummyEvents();
+      setEvents([...data, ...dummyData]);
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Failed to book event. Please try logging in again.');
+      if (error.response?.status === 401) {
+        onNavigate('login');
+      }
+    }
+  };
+
+  const handleSearchClick = () => {
+    let query = searchQuery;
+    if (selectedCategory !== 'All Categories') {
+      query = searchQuery + ' ' + selectedCategory; // basic mockup of combined search since backend lacks category
+    }
+    setActiveSearch(query);
+    document.getElementById('events-list-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleCategoryExplore = (cat) => {
+    onNavigate('category', cat);
+  };
+
+  const filteredEvents = events.filter(e => 
+    e.title.toLowerCase().includes(activeSearch.toLowerCase()) || 
+    (e.description && e.description.toLowerCase().includes(activeSearch.toLowerCase())) ||
+    e.location.toLowerCase().includes(activeSearch.toLowerCase())
+  );
+
   return (
     <div>
       {/* Hero Section */}
@@ -52,15 +118,22 @@ const Explore = ({ onNavigate }) => {
             type="text" 
             placeholder="Search by event name..." 
             className={STYLES.formInput}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
           />
-          <select className={STYLES.formInput}>
+          <select 
+            className={STYLES.formInput} 
+            value={selectedCategory} 
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
             <option>All Categories</option>
             <option>Concerts</option>
             <option>Sports</option>
             <option>Movies</option>
             <option>Comedy</option>
           </select>
-          <button className={STYLES.primaryBtn}>
+          <button onClick={handleSearchClick} className={STYLES.primaryBtn}>
             Search
           </button>
         </div>
@@ -79,27 +152,38 @@ const Explore = ({ onNavigate }) => {
               icon={category.icon}
               image={CATEGORY_IMAGES[category.name]}
               description={`${category.name} events`}
+              onExplore={handleCategoryExplore}
             />
           ))}
         </div>
       </section>
       
       {/* Featured Events Section */}
-      <section>
+      <section id="events-list-section">
         <h2 className="text-3xl font-bold text-center mb-12 text-blue-600">
           Featured Events
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {FEATURED_EVENTS.map((event) => (
-            <EventCard 
-              key={event.title}
-              title={event.title}
-              image={event.image}
-              date={event.date}
-              location={event.location}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-10">Loading events...</div>
+        ) : filteredEvents.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">No events found based on your search.</div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredEvents.slice(0, 6).map((event) => (
+              <EventCard 
+                key={event._id}
+                id={event._id}
+                title={event.title}
+                image={event.image || `https://source.unsplash.com/random/400x300/?${encodeURIComponent(event.title)}`}
+                date={event.date}
+                location={event.location}
+                price={event.price}
+                availableSpots={event.availableSpots}
+                onBook={handleBook}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
     </div>

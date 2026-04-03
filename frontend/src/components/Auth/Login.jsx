@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FormInput } from '../UI/SharedComponents';
+import { loginCall } from '../../services/api';
 import { STYLES, getRoleButtonClass } from '../../constants';
 
 const Login = ({ switchToSignup, onLogin }) => {
@@ -10,10 +11,16 @@ const Login = ({ switchToSignup, onLogin }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login Attempt:', formData, 'Role:', role);
-    if (onLogin) onLogin(role);
+    try {
+      const data = await loginCall(formData.email, formData.password, role);
+      console.log('Login Success:', data);
+      if (onLogin) onLogin(data.role || role);
+    } catch (error) {
+      console.error('Login Error:', error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || 'Invalid credentials');
+    }
   };
 
   return (
