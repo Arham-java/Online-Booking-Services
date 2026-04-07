@@ -1,55 +1,148 @@
 import React, { useState, useEffect } from 'react';
 import { getEventsCall, createEventCall, getMyBookingsCall, getAllBookingsCall } from '../services/api';
 
-// Small reusable UI pieces
-var Section = ({ title, children }) => (
-  <section className="mb-8">
-    <h3 className="text-xl font-bold mb-4 text-blue-600">{title}</h3>
-    {children}
-  </section>
-);
+/* ===== Small Section Wrapper ===== */
+function Section({ title, icon, children }) {
+  return (
+    <section style={{ marginBottom: '32px' }}>
+      <h3 style={{
+        fontSize: '1.1rem', fontWeight: '700', color: '#1e293b',
+        marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px',
+      }}>
+        <span style={{
+          width: '32px', height: '32px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+          borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '16px', color: 'white',
+        }}>{icon || '📌'}</span>
+        {title}
+      </h3>
+      {children}
+    </section>
+  );
+}
 
-// ---------- User Dashboard Components ----------
-var UserProfileCard = ({ profile, userRole, onEdit }) => (
-  <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
-    <div className="flex items-center gap-4">
-      <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-600">
-        {profile?.name ? profile.name[0].toUpperCase() : 'U'}
-      </div>
-      <div>
-        <div className="font-semibold text-gray-900 capitalize">{profile?.name || 'User Name'}</div>
-        <div className="text-sm text-gray-600">{profile?.email || 'user@example.com'}</div>
-        <div className="text-xs mt-1 bg-green-100 text-green-800 px-2 py-0.5 rounded-full inline-block capitalize">{userRole}</div>
-      </div>
-      <div className="ml-auto">
-        <button onClick={onEdit} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Edit Profile</button>
+/* ===== Profile Card ===== */
+function UserProfileCard({ profile, userRole, onEdit }) {
+  var initial = profile && profile.name ? profile.name[0].toUpperCase() : 'U';
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+      borderRadius: '20px',
+      padding: '28px',
+      color: 'white',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Decorative circle */}
+      <div style={{
+        position: 'absolute', top: '-30px', right: '-30px',
+        width: '120px', height: '120px', borderRadius: '50%',
+        background: 'rgba(255,255,255,0.1)',
+      }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative', zIndex: 1 }}>
+        <div style={{
+          width: '64px', height: '64px',
+          background: 'rgba(255,255,255,0.2)',
+          border: '3px solid rgba(255,255,255,0.4)',
+          borderRadius: '50%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '26px', fontWeight: '800',
+          color: 'white',
+        }}>
+          {initial}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: '800', fontSize: '1.1rem', textTransform: 'capitalize' }}>
+            {profile?.name || 'User Name'}
+          </div>
+          <div style={{ fontSize: '13px', opacity: '0.85', marginTop: '3px' }}>
+            {profile?.email || 'user@example.com'}
+          </div>
+          <div style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.2)',
+            borderRadius: '20px', padding: '3px 12px',
+            fontSize: '11px', fontWeight: '700',
+            textTransform: 'uppercase', letterSpacing: '0.5px',
+            marginTop: '8px',
+          }}>
+            {userRole}
+          </div>
+        </div>
+        <button
+          onClick={onEdit}
+          style={{
+            background: 'rgba(255,255,255,0.2)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            color: 'white',
+            fontWeight: '600', fontSize: '13px',
+            padding: '8px 16px', borderRadius: '12px',
+            cursor: 'pointer',
+          }}
+        >
+          Edit ✏️
+        </button>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
-var BookingItem = ({ b }) => (
-  <div className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
-    <div>
-      <div className="font-semibold text-gray-900">{b.event?.title || 'Unknown Event'}</div>
-      <div className="text-sm text-gray-600">{b.event ? new Date(b.event.date).toLocaleDateString() : ''} • {b.event?.location || ''}</div>
-      <div className="text-xs text-gray-600 mt-1">Status: <span className="font-medium capitalize">{b.status}</span></div>
-    </div>
-    <div className="flex gap-2">
-      <div className="text-right">
-        <div className="text-sm text-gray-900 font-bold">{b.tickets} tickets</div>
-        <div className="text-sm text-gray-600 font-bold">${b.totalPrice}</div>
+/* ===== Booking Item ===== */
+function BookingItem({ b }) {
+  return (
+    <div style={{
+      background: 'white',
+      borderRadius: '16px',
+      padding: '18px 22px',
+      border: '1px solid #e2e8f0',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+      gap: '16px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{
+          width: '42px', height: '42px',
+          background: 'linear-gradient(135deg, #ede9fe, #ddd6fe)',
+          borderRadius: '12px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '20px',
+        }}>
+          🎫
+        </div>
+        <div>
+          <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '15px' }}>
+            {b.event?.title || 'Unknown Event'}
+          </div>
+          <div style={{ fontSize: '13px', color: '#64748b', marginTop: '3px' }}>
+            {b.event ? new Date(b.event.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : ''} • {b.event?.location || ''}
+          </div>
+          <div style={{
+            display: 'inline-block',
+            background: b.status === 'confirmed' ? '#d1fae5' : '#fef3c7',
+            color: b.status === 'confirmed' ? '#065f46' : '#92400e',
+            fontSize: '11px', fontWeight: '700',
+            padding: '2px 10px', borderRadius: '20px',
+            marginTop: '6px', textTransform: 'capitalize',
+          }}>
+            {b.status || 'confirmed'}
+          </div>
+        </div>
+      </div>
+      <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        <div style={{ fontWeight: '800', color: '#6366f1', fontSize: '16px' }}>₹{b.totalPrice}</div>
+        <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>{b.tickets} ticket(s)</div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
+/* ===== USER DASHBOARD ===== */
 function UserDashboard({ onNavigate, userRole, userData }) {
   var [editOpen, setEditOpen] = useState(false);
   var [myBookings, setMyBookings] = useState([]);
   var [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(function() {
     async function fetchMyBookings() {
       try {
         var data = await getMyBookingsCall();
@@ -59,88 +152,197 @@ function UserDashboard({ onNavigate, userRole, userData }) {
       } finally {
         setLoading(false);
       }
-    };
+    }
     fetchMyBookings();
   }, []);
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="md:col-span-1">
-          <Section title="Profile">
-            <UserProfileCard userRole={userRole} profile={userData || { name: 'Current User', email: 'user@example.com' }} onEdit={() => setEditOpen(true)} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+
+        {/* Left column */}
+        <div>
+          <Section title="My Profile" icon="👤">
+            <UserProfileCard
+              userRole={userRole}
+              profile={userData || { name: 'Current User', email: 'user@example.com' }}
+              onEdit={() => setEditOpen(true)}
+            />
+          </Section>
+
+          {/* Quick actions */}
+          <Section title="Quick Actions" icon="⚡">
+            <div style={{ display: 'grid', gap: '12px' }}>
+              <button
+                onClick={() => onNavigate('explore')}
+                style={{
+                  background: 'linear-gradient(135deg, #f0f0ff, #e0e7ff)',
+                  border: '1px solid #c7d2fe',
+                  borderRadius: '14px', padding: '16px 20px',
+                  display: 'flex', alignItems: 'center', gap: '14px',
+                  cursor: 'pointer', textAlign: 'left',
+                }}
+                onMouseEnter={function(e) { e.currentTarget.style.background = 'linear-gradient(135deg, #e0e7ff, #c7d2fe)'; }}
+                onMouseLeave={function(e) { e.currentTarget.style.background = 'linear-gradient(135deg, #f0f0ff, #e0e7ff)'; }}
+              >
+                <span style={{ fontSize: '28px' }}>🎪</span>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '14px' }}>Explore Events</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>Discover events across India</div>
+                </div>
+              </button>
+              <button
+                onClick={() => onNavigate('events')}
+                style={{
+                  background: 'linear-gradient(135deg, #fff7ed, #ffedd5)',
+                  border: '1px solid #fed7aa',
+                  borderRadius: '14px', padding: '16px 20px',
+                  display: 'flex', alignItems: 'center', gap: '14px',
+                  cursor: 'pointer', textAlign: 'left',
+                }}
+                onMouseEnter={function(e) { e.currentTarget.style.background = 'linear-gradient(135deg, #ffedd5, #fed7aa)'; }}
+                onMouseLeave={function(e) { e.currentTarget.style.background = 'linear-gradient(135deg, #fff7ed, #ffedd5)'; }}
+              >
+                <span style={{ fontSize: '28px' }}>🎟️</span>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '14px' }}>Browse All Events</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>View all available events</div>
+                </div>
+              </button>
+            </div>
           </Section>
         </div>
 
-        <div className="md:col-span-2">
-          <Section title="My Bookings">
+        {/* Right column */}
+        <div>
+          <Section title="My Bookings" icon="📋">
             {loading ? (
-              <div className="text-sm text-gray-500">Loading your bookings...</div>
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div className="loading-spinner" />
+                <p style={{ color: '#64748b', marginTop: '16px', fontSize: '14px' }}>Loading your bookings...</p>
+              </div>
             ) : myBookings.length === 0 ? (
-              <div className="text-sm text-gray-500">You haven't booked anything yet. <button onClick={() => onNavigate('explore')} className="text-blue-600 hover:underline">Explore events</button></div>
+              <div style={{
+                textAlign: 'center', padding: '40px',
+                background: 'white', borderRadius: '20px',
+                border: '1px dashed #c7d2fe',
+              }}>
+                <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎭</div>
+                <h4 style={{ color: '#1e293b', fontWeight: '700', marginBottom: '8px' }}>No Bookings Yet</h4>
+                <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
+                  You haven't booked anything yet — let's change that!
+                </p>
+                <button
+                  onClick={() => onNavigate('explore')}
+                  className="btn-primary"
+                  style={{ padding: '12px 24px', fontSize: '14px' }}
+                >
+                  <span>Explore Events</span>
+                </button>
+              </div>
             ) : (
-              <div className="space-y-3">
-                {myBookings.map(b => (
-                  <BookingItem key={b._id} b={b} />
-                ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {myBookings.map(function(b) {
+                  return <BookingItem key={b._id} b={b} />;
+                })}
               </div>
             )}
-          </Section>
-
-          <Section title="Quick Actions">
-            <div className="bg-white p-4 rounded border border-gray-200 text-center">
-              <h4 className="font-medium text-gray-800 mb-2">Looking for something new?</h4>
-              <button onClick={() => onNavigate('events')} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Browse All Events</button>
-            </div>
           </Section>
         </div>
       </div>
 
+      {/* Edit Profile Modal */}
       {editOpen && (
-        <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center p-4">
-          <div className="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full">
-            <h4 className="font-semibold mb-2 text-gray-900 text-xl">Edit Profile</h4>
-            <p className="text-sm text-gray-600 mb-4">Profile editing functionality coming soon!</p>
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setEditOpen(false)} className="px-4 py-2 rounded border border-gray-200 text-gray-900 hover:bg-gray-100">Close</button>
-            </div>
+        <div style={{
+          position: 'fixed', inset: 0,
+          background: 'rgba(0,0,0,0.6)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1000, padding: '20px',
+          backdropFilter: 'blur(4px)',
+        }}>
+          <div style={{
+            background: 'white', borderRadius: '24px',
+            padding: '36px', maxWidth: '420px', width: '100%',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.25)',
+          }}>
+            <h4 style={{ fontWeight: '800', fontSize: '1.4rem', color: '#1e293b', marginBottom: '8px' }}>
+              Edit Profile ✏️
+            </h4>
+            <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '28px' }}>
+              Profile editing functionality coming soon! We're working on it.
+            </p>
+            <button
+              onClick={() => setEditOpen(false)}
+              className="btn-primary"
+              style={{ width: '100%', padding: '14px' }}
+            >
+              <span>Close</span>
+            </button>
           </div>
         </div>
       )}
     </div>
   );
-};
+}
 
-// ---------- Organizer Dashboard Components ----------
-var ListingItem = ({ item }) => (
-  <div className="bg-white p-3 rounded border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-    <div>
-      <div className="font-medium text-gray-900 text-lg">{item.title}</div>
-      <div className="text-sm text-gray-600">{new Date(item.date).toLocaleDateString()} • {item.location}</div>
-      <div className="text-xs text-gray-500 mt-1">
-        Price: ${item.price} • Spots: {item.availableSpots}/{item.totalSpots} left
+/* ===== LISTING ITEM ===== */
+function ListingItem({ item }) {
+  return (
+    <div style={{
+      background: 'white', borderRadius: '16px',
+      padding: '18px 22px', border: '1px solid #e2e8f0',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+      gap: '16px',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{
+          width: '42px', height: '42px',
+          background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)',
+          borderRadius: '12px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '20px',
+        }}>
+          🎪
+        </div>
+        <div>
+          <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '15px' }}>{item.title}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', marginTop: '3px' }}>
+            {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} • {item.location}
+          </div>
+          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+            ₹{item.price} • {item.availableSpots}/{item.totalSpots} spots left
+          </div>
+        </div>
+      </div>
+      <div style={{
+        background: item.availableSpots > 0 ? '#d1fae5' : '#fee2e2',
+        color: item.availableSpots > 0 ? '#065f46' : '#dc2626',
+        fontSize: '11px', fontWeight: '700',
+        padding: '4px 12px', borderRadius: '20px',
+        whiteSpace: 'nowrap',
+      }}>
+        {item.availableSpots > 0 ? '✅ Active' : '❌ Sold Out'}
       </div>
     </div>
-  </div>
-);
+  );
+}
 
+/* ===== ORGANIZER DASHBOARD ===== */
 function OrganizerDashboard({ userRole, userData }) {
   var [loading, setLoading] = useState(true);
   var [events, setEvents] = useState([]);
   var [bookings, setBookings] = useState([]);
   var [addMode, setAddMode] = useState(false);
-  
+
   var [formData, setFormData] = useState({
-    title: '', description: '', date: '', location: '', price: 0, totalSpots: 100
+    title: '', description: '', date: '', location: '', price: 0, totalSpots: 100,
   });
 
   async function fetchData() {
     setLoading(true);
     try {
       var allEvents = await getEventsCall();
-      // Simulating "my events" logic on client side since backend doesn't have an exact endpoint. 
-      // Actually wait, I added an endpoint? Let me just use getEventsCall and not filter for simplicity in prototype, 
-      // OR better, we know the organizer's bookings are filtered in getBookings!
       setEvents(allEvents);
       var orgBookings = await getAllBookingsCall();
       setBookings(orgBookings);
@@ -149,9 +351,9 @@ function OrganizerDashboard({ userRole, userData }) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
+  useEffect(function() {
     fetchData();
   }, []);
 
@@ -167,94 +369,167 @@ function OrganizerDashboard({ userRole, userData }) {
       console.log(err);
       alert(err.response?.data?.message || 'Failed to create event');
     }
-  };
+  }
 
   function handleChange(e) {
-    setFormData(prev => ({...prev, [e.target.name]: e.target.value}));
-  };
+    setFormData(function(prev) { return Object.assign({}, prev, { [e.target.name]: e.target.value }); });
+  }
 
-  var totalEarnings = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+  var totalEarnings = bookings.reduce(function(sum, b) { return sum + (b.totalPrice || 0); }, 0);
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-1 space-y-6">
-          <Section title="Profile Overview">
-            <UserProfileCard userRole={userRole} profile={userData || { name: 'Organizer Business', email: 'org@events.test' }} onEdit={() => {}} />
-          </Section>
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+        <div className="stat-card">
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>📅</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#6366f1', fontFamily: 'Poppins, sans-serif' }}>{events.length}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Events Created</div>
+        </div>
+        <div className="stat-card">
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>🎫</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#8b5cf6', fontFamily: 'Poppins, sans-serif' }}>{bookings.length}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Bookings</div>
+        </div>
+        <div className="stat-card">
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>💰</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#10b981', fontFamily: 'Poppins, sans-serif' }}>₹{totalEarnings.toLocaleString('en-IN')}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Revenue</div>
+        </div>
+      </div>
 
-          <Section title="Earnings Snapshot">
-            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-              <div className="font-semibold text-gray-600 text-sm uppercase mb-1">Total Revenue</div>
-              <div className="text-4xl text-blue-600 font-bold">${totalEarnings.toLocaleString()}</div>
-              <div className="text-sm text-gray-500 mt-2 border-t pt-2">From {bookings.length} successful bookings</div>
-            </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
+
+        {/* Left */}
+        <div>
+          <Section title="Profile Overview" icon="👤">
+            <UserProfileCard
+              userRole={userRole}
+              profile={userData || { name: 'Event Organizer', email: 'org@eventsphere.in' }}
+              onEdit={function() {}}
+            />
           </Section>
         </div>
 
-        <div className="lg:col-span-2 space-y-8">
-          <Section title="Manage Events Listings">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-sm text-gray-600">Events published to the platform</div>
-              <button onClick={() => setAddMode(true)} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                + Create New Event
+        {/* Right */}
+        <div>
+          {/* Events */}
+          <Section title="Manage Events" icon="🎪">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <span style={{ fontSize: '13px', color: '#64748b' }}>{events.length} events published</span>
+              <button
+                onClick={() => setAddMode(true)}
+                className="btn-primary"
+                style={{ padding: '10px 20px', fontSize: '13px', borderRadius: '12px' }}
+              >
+                <span>+ Create Event</span>
               </button>
             </div>
-            
+
+            {/* Create form */}
             {addMode && (
-              <form onSubmit={handleAddSubmit} className="bg-blue-50 p-5 rounded-lg border border-blue-200 mb-6">
-                <h4 className="font-bold mb-4">Create a New Event</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <input required name="title" value={formData.title} onChange={handleChange} placeholder="Event Title" className="col-span-2 p-2 border rounded" />
-                  <textarea required name="description" value={formData.description} onChange={handleChange} placeholder="Event Description" className="col-span-2 p-2 border rounded" />
-                  <input required name="date" type="datetime-local" value={formData.date} onChange={handleChange} className="p-2 border rounded" />
-                  <input required name="location" value={formData.location} onChange={handleChange} placeholder="Location" className="p-2 border rounded" />
+              <form onSubmit={handleAddSubmit} style={{
+                background: 'linear-gradient(135deg, #f0f0ff, #ede9fe)',
+                borderRadius: '20px', padding: '24px',
+                border: '1px solid #c7d2fe', marginBottom: '20px',
+              }}>
+                <h4 style={{ fontWeight: '800', color: '#1e293b', marginBottom: '20px', fontSize: '1.1rem' }}>
+                  🆕 Create New Event
+                </h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                  <input required name="title" value={formData.title} onChange={handleChange}
+                    placeholder="Event Title (e.g. Sunburn Goa 2026)"
+                    className="form-control" style={{ gridColumn: '1 / -1' }}
+                  />
+                  <textarea required name="description" value={formData.description} onChange={handleChange}
+                    placeholder="Event Description"
+                    className="form-control" rows="3" style={{ gridColumn: '1 / -1', resize: 'vertical' }}
+                  />
+                  <input required name="date" type="datetime-local" value={formData.date} onChange={handleChange}
+                    className="form-control"
+                  />
+                  <input required name="location" value={formData.location} onChange={handleChange}
+                    placeholder="Location (e.g. Wankhede Stadium, Mumbai)"
+                    className="form-control"
+                  />
                   <div>
-                    <label className="text-xs text-gray-600 block mb-1">Price ($)</label>
-                    <input required name="price" type="number" min="0" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" />
+                    <label className="form-label">Price (₹)</label>
+                    <input required name="price" type="number" min="0" value={formData.price} onChange={handleChange}
+                      className="form-control"
+                    />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600 block mb-1">Total Spots</label>
-                    <input required name="totalSpots" type="number" min="1" value={formData.totalSpots} onChange={handleChange} className="w-full p-2 border rounded" />
+                    <label className="form-label">Total Spots</label>
+                    <input required name="totalSpots" type="number" min="1" value={formData.totalSpots} onChange={handleChange}
+                      className="form-control"
+                    />
                   </div>
                 </div>
-                <div className="flex justify-end gap-2 mt-4">
-                  <button type="button" onClick={() => setAddMode(false)} className="px-4 py-2 border rounded text-gray-700 bg-white">Cancel</button>
-                  <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Publish Event</button>
+                <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                  <button type="button" onClick={() => setAddMode(false)} style={{
+                    flex: 1, padding: '12px', borderRadius: '12px',
+                    background: 'white', border: '1px solid #e2e8f0',
+                    color: '#64748b', fontWeight: '600', cursor: 'pointer',
+                  }}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-primary" style={{ flex: 2, padding: '12px', borderRadius: '12px' }}>
+                    <span>🚀 Publish Event</span>
+                  </button>
                 </div>
               </form>
             )}
 
             {loading ? (
-               <div className="text-sm text-gray-500">Loading events...</div>
+              <div style={{ textAlign: 'center', padding: '30px 0' }}>
+                <div className="loading-spinner" />
+              </div>
             ) : events.length === 0 ? (
-               <div className="text-sm text-gray-500 bg-gray-50 p-6 rounded text-center">No events found. Start by creating one!</div>
+              <div style={{ textAlign: 'center', padding: '40px', background: 'white', borderRadius: '16px', border: '1px dashed #c7d2fe' }}>
+                <div style={{ fontSize: '48px', marginBottom: '12px' }}>📭</div>
+                <p style={{ color: '#64748b', fontSize: '14px' }}>No events yet. Create your first event!</p>
+              </div>
             ) : (
-              <div className="space-y-3">
-                {events.map(ev => <ListingItem key={ev._id} item={ev} />)}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {events.map(function(ev) { return <ListingItem key={ev._id} item={ev} />; })}
               </div>
             )}
           </Section>
 
-          <Section title="Recent Bookings">
+          {/* Recent Bookings */}
+          <Section title="Recent Bookings" icon="📊">
             {loading ? (
-              <div className="text-sm text-gray-500">Loading bookings...</div>
+              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <div className="loading-spinner" />
+              </div>
             ) : bookings.length === 0 ? (
-              <div className="text-sm text-gray-500 bg-gray-50 p-6 rounded text-center">No bookings on your events yet.</div>
-            )  : (
-              <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                {bookings.map(b => (
-                  <div key={b._id} className="bg-white p-3 rounded border border-gray-200 flex items-center justify-between">
-                    <div>
-                      <div className="font-semibold text-gray-900">{b.event?.title || 'Unknown Event'}</div>
-                      <div className="text-xs text-gray-600">Booked by: <span className="font-medium text-gray-800">{b.user?.name || 'Someone'}</span> (<a href={`mailto:${b.user?.email}`}>{b.user?.email}</a>)</div>
+              <div style={{ textAlign: 'center', padding: '32px', background: 'white', borderRadius: '16px', border: '1px dashed #c7d2fe' }}>
+                <p style={{ color: '#64748b', fontSize: '14px' }}>No bookings on your events yet.</p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '360px', overflowY: 'auto' }}>
+                {bookings.map(function(b) {
+                  return (
+                    <div key={b._id} style={{
+                      background: 'white', borderRadius: '14px',
+                      padding: '16px 20px', border: '1px solid #e2e8f0',
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    }}>
+                      <div>
+                        <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '14px' }}>
+                          {b.event?.title || 'Unknown Event'}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px' }}>
+                          Booked by: <strong style={{ color: '#1e293b' }}>{b.user?.name || 'Someone'}</strong>
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontWeight: '700', color: '#6366f1' }}>₹{b.totalPrice}</div>
+                        <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '3px' }}>{b.tickets} ticket(s)</div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-bold">{b.tickets} Ticket(s)</div>
-                      <div className="text-sm text-green-700 font-bold">+${b.totalPrice}</div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </Section>
@@ -262,41 +537,71 @@ function OrganizerDashboard({ userRole, userData }) {
       </div>
     </div>
   );
-};
+}
 
-// Main wrapper
-function Dashboard({ onNavigate, userRole = 'user', userData }) {
+/* ===== MAIN DASHBOARD WRAPPER ===== */
+function Dashboard({ onNavigate, userRole, userData }) {
+  if (!userRole) userRole = 'user';
+
   return (
-    <div>
-      {/* Hero Section */}
-      <div className="relative text-white py-24 px-8 text-center overflow-hidden"
+    <div className="page-wrapper">
+
+      {/* Hero */}
+      <div
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=80")',
+          position: 'relative',
+          color: 'white',
+          padding: '70px 32px 80px',
+          textAlign: 'center',
+          overflow: 'hidden',
+          minHeight: '380px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1800&q=80")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-blue-900/80 mix-blend-multiply"></div>
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <h1 className="text-5xl font-extrabold mb-4 text-white">
-            {userRole === 'user' ? 'My Dashboard' : 'Organizer Dashboard'}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, rgba(15,12,41,0.9) 0%, rgba(48,43,99,0.85) 100%)',
+        }} />
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: '700px', margin: '0 auto' }}>
+          <div style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.12)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            borderRadius: '30px',
+            padding: '8px 22px',
+            fontSize: '14px',
+            fontWeight: '600',
+            marginBottom: '24px',
+          }}>
+            {userRole === 'user' ? '👤 User Portal' : '🏢 Organizer Portal'}
+          </div>
+          <h1 className="animate-fade-in-up" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', fontFamily: 'Poppins, sans-serif', marginBottom: '16px' }}>
+            {userRole === 'user' ? '🎫 My Dashboard' : '🎪 Organizer Dashboard'}
           </h1>
-          <p className="text-lg text-blue-100 font-medium">
-            {userRole === 'user' 
-              ? 'Manage your bookings, explore events, and track payments'
-              : 'Create, manage, and analyze your events'}
+          <p className="animate-fade-in-up delay-200" style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.82)', lineHeight: '1.7' }}>
+            {userRole === 'user'
+              ? 'Manage your bookings, explore events, and track your payments.'
+              : 'Create, manage, and analyze your events and bookings.'}
           </p>
         </div>
       </div>
 
       {/* Dashboard Content */}
-      <div className="min-h-[60vh] p-6 bg-gradient-to-b from-blue-50 to-gray-50 text-gray-900">
-        <div className="max-w-7xl mx-auto">
-          {userRole === 'user' ? <UserDashboard onNavigate={onNavigate} userRole={userRole} userData={userData} /> : <OrganizerDashboard userRole={userRole} userData={userData} />}
+      <div style={{ padding: '48px 32px', background: 'linear-gradient(180deg, #f8faff 0%, #f0f4ff 100%)', minHeight: '60vh' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          {userRole === 'user'
+            ? <UserDashboard onNavigate={onNavigate} userRole={userRole} userData={userData} />
+            : <OrganizerDashboard userRole={userRole} userData={userData} />
+          }
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;

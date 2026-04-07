@@ -1,28 +1,8 @@
 import React, { useState } from 'react';
-import { STYLES } from '../../constants';
 
-// Feature card component for homepage
-function FeatureCard(props) {
-  return (
-    <div className={STYLES.card + ' ' + STYLES.cardShadow + ' overflow-hidden flex flex-col'}>
-      <div className="relative h-48 overflow-hidden">
-        <img src={props.image} alt={props.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
-      </div>
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="text-4xl mb-3">{props.icon}</div>
-        <h3 className="text-xl font-bold mb-3 text-blue-600">{props.title}</h3>
-        <p className="text-gray-600 leading-relaxed flex-1">{props.desc}</p>
-      </div>
-    </div>
-  );
-}
-
-// Payment Modal Component
+/*PAYMENT MODAL*/
 function PaymentModal(props) {
-  if (props.isOpen == false) {
-    return null;
-  }
+  if (props.isOpen === false) return null;
 
   function handleFormSubmit(e) {
     e.preventDefault();
@@ -30,60 +10,153 @@ function PaymentModal(props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-fadeIn">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Checkout</h2>
-          <button onClick={props.onClose} className="text-gray-400 hover:text-gray-600">
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(0,0,0,0.7)',
+      backdropFilter: 'blur(8px)',
+      padding: '20px',
+    }}>
+      <div className="animate-fade-in-up" style={{
+        background: 'white',
+        borderRadius: '28px',
+        boxShadow: '0 40px 100px rgba(0,0,0,0.4)',
+        maxWidth: '480px', width: '100%',
+        padding: '0',
+        overflow: 'hidden',
+      }}>
+        {/* Header */}
+        <div style={{
+          background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+          padding: '24px 28px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          color: 'white',
+        }}>
+          <div>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '4px', fontFamily: 'Poppins, sans-serif' }}>
+              🎫 Secure Checkout
+            </h2>
+            <p style={{ opacity: '0.85', fontSize: '13px' }}>Complete your booking safely</p>
+          </div>
+          <button
+            onClick={props.onClose}
+            style={{
+              background: 'rgba(255,255,255,0.2)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              color: 'white', borderRadius: '10px',
+              width: '36px', height: '36px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', fontSize: '18px',
+            }}
+          >
             ✕
           </button>
         </div>
-        
-        <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-600 font-semibold mb-1">Booking Event</p>
-          <p className="font-bold text-gray-900">{props.title}</p>
-          {props.price !== undefined && (
-            <p className="mt-2 text-xl font-bold text-blue-600">Total: ${props.price}</p>
-          )}
-        </div>
 
-        <form onSubmit={handleFormSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Cardholder Name</label>
-              <input type="text" required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="John Doe" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
-              <input type="text" required pattern="\d{16}" title="16 digit card number" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="0000 0000 0000 0000" />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
-                <input type="text" required placeholder="MM/YY" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+        {/* Event Info */}
+        <div style={{ padding: '24px 28px 0' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #f0f0ff, #ede9fe)',
+            border: '1px solid #c7d2fe',
+            borderRadius: '16px', padding: '18px 20px',
+            marginBottom: '24px',
+          }}>
+            <p style={{ color: '#6366f1', fontWeight: '700', fontSize: '12px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              📅 Booking Event
+            </p>
+            <p style={{ fontWeight: '800', color: '#1e293b', fontSize: '1rem', marginBottom: '8px' }}>
+              {props.title}
+            </p>
+            {props.price !== undefined && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  fontSize: '1.6rem', fontWeight: '900', color: '#6366f1',
+                  fontFamily: 'Poppins, sans-serif',
+                }}>
+                  ₹{props.price}
+                </span>
+                <span style={{ fontSize: '13px', color: '#94a3b8' }}>total</span>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">CVV</label>
-                <input type="text" required pattern="\d{3,4}" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="123" />
-              </div>
-            </div>
+            )}
           </div>
-          
-          <button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl">
-            Pay & Book Now
-          </button>
-        </form>
+
+          {/* Card Form */}
+          <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label className="form-label">Cardholder Name</label>
+              <input
+                type="text"
+                required
+                placeholder="Rahul Sharma"
+                className="form-control"
+              />
+            </div>
+            <div>
+              <label className="form-label">Card Number</label>
+              <input
+                type="text"
+                required
+                pattern="\d{16}"
+                title="Enter 16-digit card number"
+                placeholder="0000 0000 0000 0000"
+                className="form-control"
+              />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+              <div>
+                <label className="form-label">Expiry Date</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="MM/YY"
+                  className="form-control"
+                />
+              </div>
+              <div>
+                <label className="form-label">CVV</label>
+                <input
+                  type="text"
+                  required
+                  pattern="\d{3,4}"
+                  title="3 or 4 digit CVV"
+                  placeholder="123"
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn-primary"
+              style={{ padding: '16px', fontSize: '16px', borderRadius: '14px', marginTop: '4px' }}
+            >
+              <span>Pay & Confirm Booking</span>
+            </button>
+
+            <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginBottom: '8px' }}>
+              256-bit SSL encrypted. Your payment is 100% secure.
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
 }
 
-// Event card component
+/* EVENT CARD*/
 function EventCard(props) {
   var [showPayment, setShowPayment] = useState(false);
+
   var priceToUse = props.price;
-  if (priceToUse === undefined) {
-    priceToUse = 50;
+  if (priceToUse === undefined) priceToUse = 500;
+
+  var fallbackImage = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=500&h=350&fit=crop&auto=format';
+
+  var imageToUse = props.image;
+  if (!imageToUse) imageToUse = fallbackImage;
+
+  function handleImgError(e) {
+    e.target.src = fallbackImage;
   }
 
   function handleBookClick() {
@@ -99,51 +172,105 @@ function EventCard(props) {
     }
   }
 
-  var buttonClass = STYLES.primaryBtn + ' mt-auto';
-  if (props.availableSpots === 0) {
-    buttonClass = buttonClass + ' opacity-50 cursor-not-allowed';
-  }
-
-  var imageToUse = props.image;
-  if (!imageToUse) {
-    imageToUse = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80';
-  }
+  var isSoldOut = props.availableSpots === 0;
 
   return (
     <>
-      <div className={STYLES.card + ' ' + STYLES.cardShadow + ' overflow-hidden flex flex-col relative'}>
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full font-bold text-gray-900 z-10 shadow-sm border border-white/20">
-            ${priceToUse}
-        </div>
-        <div className="relative h-48 overflow-hidden">
-          <img src={imageToUse} alt={props.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
-        </div>
-        <div className="p-6 flex-1 flex flex-col">
-          <h3 className="text-xl font-bold mb-3 text-blue-600">{props.title}</h3>
-          <p className="text-gray-600 mb-2 flex items-center gap-2">
-            <span>📅</span> {new Date(props.date).toLocaleDateString()}
-          </p>
-          <p className="text-gray-600 mb-2 flex items-center gap-2">
-            <span>📍</span> {props.location}
-          </p>
-          {props.availableSpots !== undefined && (
-            <p className="text-gray-600 mb-4 flex items-center gap-2 font-medium">
-              <span>🎫</span> {props.availableSpots > 0 ? props.availableSpots + ' spots left' : 'Sold out!'}
-            </p>
+      <div
+        className="card-premium"
+        style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+      >
+        {/* Image */}
+        <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
+          <img
+            src={imageToUse}
+            alt={props.title}
+            onError={handleImgError}
+            className="img-hover-zoom"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+          {/* Price Badge */}
+          <div style={{
+            position: 'absolute', top: '14px', right: '14px',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            color: 'white', fontWeight: '800', fontSize: '13px',
+            padding: '5px 14px', borderRadius: '20px',
+            boxShadow: '0 4px 12px rgba(99,102,241,0.4)',
+            zIndex: 5,
+          }}>
+            ₹{priceToUse}
+          </div>
+          {/* Sold Out overlay */}
+          {isSoldOut && (
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(0,0,0,0.55)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <div style={{
+                background: '#ef4444', color: 'white',
+                fontWeight: '800', fontSize: '16px',
+                padding: '10px 28px', borderRadius: '30px',
+                letterSpacing: '1px',
+              }}>
+                SOLD OUT
+              </div>
+            </div>
           )}
-          <button 
-            onClick={handleBookClick} 
-            disabled={props.availableSpots === 0}
-            className={buttonClass}
+          {/* Gradient overlay at bottom */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%',
+            background: 'linear-gradient(to top, rgba(15,12,41,0.5), transparent)',
+          }} />
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: '22px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', marginBottom: '12px', lineHeight: '1.4' }}>
+            {props.title}
+          </h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '16px' }}>
+            <span style={{ color: '#6366f1', fontSize: '13px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              📅 {props.date ? new Date(props.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'TBD'}
+            </span>
+            <span style={{ color: '#475569', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              📍 {props.location}
+            </span>
+            {props.availableSpots !== undefined && (
+              <span style={{
+                fontSize: '13px',
+                color: props.availableSpots > 10 ? '#10b981' : props.availableSpots > 0 ? '#f97316' : '#ef4444',
+                fontWeight: '600',
+                display: 'flex', alignItems: 'center', gap: '6px',
+              }}>
+                🎫 {props.availableSpots > 0 ? props.availableSpots + ' spots left' : 'Sold out!'}
+              </span>
+            )}
+          </div>
+
+          <button
+            onClick={handleBookClick}
+            disabled={isSoldOut}
+            className={isSoldOut ? '' : 'btn-primary'}
+            style={{
+              marginTop: 'auto',
+              width: '100%', padding: '12px',
+              borderRadius: '12px', fontSize: '14px',
+              fontWeight: '700', cursor: isSoldOut ? 'not-allowed' : 'pointer',
+              border: 'none',
+              background: isSoldOut ? '#e2e8f0' : undefined,
+              color: isSoldOut ? '#94a3b8' : undefined,
+            }}
           >
-            {props.availableSpots === 0 ? 'Sold Out' : 'Book Now'}
+            {isSoldOut ? 'Sold Out' : <span>Book Now</span>}
           </button>
         </div>
       </div>
-      <PaymentModal 
-        isOpen={showPayment} 
-        onClose={function() { setShowPayment(false); }} 
+
+      <PaymentModal
+        isOpen={showPayment}
+        onClose={function() { setShowPayment(false); }}
         onConfirm={handleConfirmPayment}
         price={priceToUse}
         title={props.title}
@@ -152,67 +279,147 @@ function EventCard(props) {
   );
 }
 
-// Event category card
+/* ===== EVENT CATEGORY CARD ===== */
 function EventCategoryCard(props) {
+  var fallback = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=200&fit=crop&auto=format';
+
   function handleExplore() {
     if (props.onExplore != null) {
       props.onExplore(props.category);
     }
   }
 
+  function handleImgError(e) {
+    e.target.src = fallback;
+  }
+
   return (
-    <div className={STYLES.card + ' ' + STYLES.cardShadow + ' text-center group flex flex-col overflow-hidden'}>
-      <div className="relative h-32 overflow-hidden">
-        <img src={props.image} alt={props.category} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-          <div className="text-4xl group-hover:scale-110 transition duration-300">{props.icon}</div>
+    <div className="card-premium" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      {/* Image */}
+      <div style={{ position: 'relative', height: '140px', overflow: 'hidden' }}>
+        <img
+          src={props.image || fallback}
+          alt={props.category}
+          onError={handleImgError}
+          className="img-hover-zoom"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        {/* Icon overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(15,12,41,0.65), rgba(0,0,0,0.1))',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <span style={{ fontSize: '44px', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))' }}>
+            {props.icon}
+          </span>
         </div>
       </div>
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="text-lg font-bold mb-2 text-blue-600">{props.category}</h3>
-        <p className="text-gray-600 mb-4 flex-1">{props.description}</p>
-        <button onClick={handleExplore} className={STYLES.primaryBtn}>
-          Explore
+
+      {/* Content */}
+      <div style={{ padding: '18px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ fontWeight: '700', fontSize: '1rem', color: '#1e293b', marginBottom: '8px' }}>
+          {props.category}
+        </h3>
+        <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '16px', flex: 1 }}>
+          {props.description}
+        </p>
+        <button
+          onClick={handleExplore}
+          className="btn-primary"
+          style={{ padding: '10px', fontSize: '13px', borderRadius: '12px', width: '100%' }}
+        >
+          <span>Explore →</span>
         </button>
       </div>
     </div>
   );
 }
 
-// Contact information card
+/* ===== CONTACT CARD ===== */
 function ContactCard(props) {
   return (
-    <div className={STYLES.card + ' p-8 text-center'}>
-      <div className="text-5xl mb-4">{props.icon}</div>
-      <h3 className="text-xl font-bold mb-2 text-blue-600">{props.title}</h3>
-      <p className="text-gray-900 mb-2">{props.details}</p>
-      <p className="text-gray-600 text-sm">{props.subtext}</p>
+    <div style={{
+      background: 'white',
+      borderRadius: '20px',
+      padding: '32px',
+      textAlign: 'center',
+      border: '1px solid #e2e8f0',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+      transition: 'all 0.3s ease',
+    }}
+    onMouseEnter={function(e) {
+      e.currentTarget.style.transform = 'translateY(-6px)';
+      e.currentTarget.style.boxShadow = '0 16px 40px rgba(99,102,241,0.15)';
+    }}
+    onMouseLeave={function(e) {
+      e.currentTarget.style.transform = 'translateY(0)';
+      e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)';
+    }}
+    >
+      <div style={{
+        width: '64px', height: '64px',
+        background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+        borderRadius: '18px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '30px', margin: '0 auto 16px',
+        boxShadow: '0 8px 20px rgba(99,102,241,0.3)',
+      }}>
+        {props.icon}
+      </div>
+      <h3 style={{ fontWeight: '700', fontSize: '1.1rem', color: '#1e293b', marginBottom: '10px' }}>
+        {props.title}
+      </h3>
+      <p style={{ color: '#374151', fontWeight: '500', marginBottom: '6px' }}>{props.details}</p>
+      <p style={{ color: '#94a3b8', fontSize: '13px' }}>{props.subtext}</p>
     </div>
   );
 }
 
-// Form input component
+/* ===== FEATURE CARD ===== */
+function FeatureCard(props) {
+  var fallback = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=500&h=300&fit=crop&auto=format';
+  function handleImgError(e) { e.target.src = fallback; }
+
+  return (
+    <div className="card-premium" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'relative', height: '180px', overflow: 'hidden' }}>
+        <img
+          src={props.image || fallback}
+          alt={props.title}
+          onError={handleImgError}
+          className="img-hover-zoom"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, white 0%, transparent 60%)',
+        }} />
+      </div>
+      <div style={{ padding: '24px' }}>
+        <div style={{ fontSize: '36px', marginBottom: '12px' }}>{props.icon}</div>
+        <h3 style={{ fontWeight: '700', color: '#6366f1', fontSize: '1.1rem', marginBottom: '10px' }}>{props.title}</h3>
+        <p style={{ color: '#64748b', lineHeight: '1.7', fontSize: '14px' }}>{props.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ===== FORM INPUT ===== */
 function FormInput(props) {
-  var typeToUse = props.type;
-  if (typeToUse === undefined) {
-    typeToUse = 'text';
-  }
-  
-  var isRequired = props.required;
-  if (isRequired === undefined) {
-    isRequired = true;
-  }
+  var typeToUse = props.type || 'text';
+  var isRequired = props.required !== undefined ? props.required : true;
 
   return (
     <div>
-      <label className={STYLES.formLabel}>{props.label}</label>
-      <input 
-        type={typeToUse} 
+      <label className="form-label">{props.label}</label>
+      <input
+        type={typeToUse}
         placeholder={props.placeholder}
         value={props.value}
         onChange={props.onChange}
         required={isRequired}
-        className={STYLES.formInput}
+        className="form-control"
       />
     </div>
   );

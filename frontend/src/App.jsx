@@ -79,7 +79,7 @@ function App() {
             CurrentComponent && <CurrentComponent onNavigate={handleNavigate} viewData={viewData} />
           )}
         </main>
-        <Footer />
+        <Footer onNavigate={handleNavigate} />
       </div>
     );
   }
@@ -99,7 +99,7 @@ function App() {
           <CurrentComponent onNavigate={handleNavigate} viewData={viewData} />
         )}
       </main>
-      <Footer />
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }

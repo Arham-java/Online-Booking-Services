@@ -7,10 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build output
+dist/
+dist-ssr/
+build/
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +32,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary and local user files
+*.local
+
+# Custom ignores
+backend/seed-output.txt
+
+
+
+
+# 1. What was updated in .gitignore
+# I added several categories specifically meant for a MERN stack application. Here is a breakdown of what each section does and why it's there:
+
+# node_modules/ (Dependencies): This folder contains all the external code you download via npm. It is very large (often hundreds of megabytes) and has thousands of files. You should never upload it because anyone who clones the project can simply run npm install to download all the dependencies automatically based on your package.json. Additionally, some modules are specific to the operating system (e.g., Windows vs Mac), so sharing them directly can cause bugs.
+# .env and .env.local (Environment Variables): These files contain sensitive secrets like your database URLs (MongoDB connection string), API keys, and JWT secrets. If you upload these to Git/GitHub, anyone can find your passwords, connect to your database, and potentially steal or delete your data!
+# dist/ and build/ (Build Outputs): When you build your React frontend for production (using npm run build), it generates optimized HTML, CSS, and JS files in a dist or build folder. These files are automatically generated, so tracking them only creates unnecessary clutter and conflicts in your Git history.
+# npm-debug.log*, *.log (Logs): Sometimes whenever an application crashes locally, npm creates a log file. These are specific to an error on your machine and are completely useless to anyone else examining your repository online.
+# .DS_Store, .vscode/*, etc. (System & Editor Files): If you use VS Code, or are on a Mac, or use Windows IDEs, they automatically generate hidden files. These are your personal workspace settings and shouldn't be forced onto other developers.

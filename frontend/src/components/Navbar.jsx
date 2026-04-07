@@ -1,66 +1,113 @@
-import React from 'react';
-import { NAVIGATION_ITEMS, STYLES } from '../constants';
+import React, { useState } from 'react';
+import { NAVIGATION_ITEMS } from '../constants';
 
 function Navbar({ isLoggedIn, onLogout, onNavigate }) {
+  var [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200 shadow-sm">
-      {/* Logo */}
-      <button
-        onClick={() => onNavigate('home')}
-        className="text-2xl font-bold cursor-pointer hover:opacity-80 transition text-blue-600"
-      >
-        EventSphere
-      </button>
+    <nav className="fixed top-0 left-0 right-0 z-50 navbar-glass">
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
 
-      {/* Navigation Links */}
-      <div className="hidden md:flex space-x-8 font-medium text-gray-700">
-        {NAVIGATION_ITEMS.map((item) => (
-          <button 
-            key={item.view} 
-            onClick={() => onNavigate(item.view)}
-            className="hover:text-blue-600 transition duration-300"
+          {/* Logo */}
+          <button
+            onClick={() => onNavigate('home')}
+            style={{
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '26px',
+              fontWeight: '800',
+              fontFamily: 'Poppins, sans-serif',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              letterSpacing: '-0.5px',
+            }}
           >
-            {item.label}
+            🎫 EventSphere
           </button>
-        ))}
-        {isLoggedIn && (
-          <button 
-            onClick={() => onNavigate('dashboard')}
-            className="hover:text-blue-600 transition duration-300"
-          >
-            Dashboard
-          </button>
-        )}
-      </div>
 
-      {/* Auth Buttons */}
-      <div className="space-x-4">
-        {!isLoggedIn ? (
-          <>
-            <button 
-              onClick={() => onNavigate('login')}
-              className="text-blue-600 font-semibold px-4 py-2 hover:text-blue-700 transition"
-            >
-              Login
-            </button>
-            <button 
-              onClick={() => onNavigate('signup')}
-              className={STYLES.primaryBtn}
-            >
-              Sign Up
-            </button>
-          </>
-        ) : (
-          <button 
-            onClick={onLogout}
-            className="border border-red-300 text-red-600 px-5 py-2 rounded-lg font-semibold hover:bg-red-50 transition duration-300"
-          >
-            Logout
-          </button>
-        )}
+          {/* Desktop Navigation */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} className="hidden md:flex">
+            {NAVIGATION_ITEMS.map(function(item) {
+              return (
+                <button
+                  key={item.view}
+                  onClick={() => onNavigate(item.view)}
+                  className="nav-link"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px' }}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+            {isLoggedIn && (
+              <button
+                onClick={() => onNavigate('dashboard')}
+                className="nav-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px' }}
+              >
+                Dashboard
+              </button>
+            )}
+          </div>
+
+          {/* Auth Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {!isLoggedIn ? (
+              <>
+                <button
+                  onClick={() => onNavigate('login')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#6366f1',
+                    fontWeight: '600',
+                    fontSize: '15px',
+                    padding: '8px 16px',
+                    borderRadius: '10px',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={function(e) { e.target.style.background = '#f0f0ff'; }}
+                  onMouseLeave={function(e) { e.target.style.background = 'none'; }}
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => onNavigate('signup')}
+                  className="btn-primary"
+                  style={{ padding: '10px 24px', fontSize: '14px', borderRadius: '12px' }}
+                >
+                  <span>Sign Up Free</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={onLogout}
+                style={{
+                  background: 'linear-gradient(135deg, #fee2e2, #fecaca)',
+                  border: '1px solid #fca5a5',
+                  color: '#dc2626',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  padding: '10px 22px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={function(e) { e.target.style.background = 'linear-gradient(135deg, #fecaca, #fca5a5)'; }}
+                onMouseLeave={function(e) { e.target.style.background = 'linear-gradient(135deg, #fee2e2, #fecaca)'; }}
+              >
+                Logout
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;
