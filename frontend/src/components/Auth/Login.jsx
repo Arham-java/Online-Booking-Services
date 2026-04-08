@@ -16,7 +16,7 @@ function Login({ switchToSignup, onLogin }) {
     try {
       var data = await loginCall(formData.email, formData.password, role);
       console.log('Login Success:', data);
-      if (onLogin) onLogin(data.role || role);
+      if (onLogin) onLogin(data);
     } catch (error) {
       console.log('Login Error:', error.response?.data?.message || error.message);
       alert(error.response?.data?.message || 'Invalid credentials. Please try again.');

@@ -45,9 +45,9 @@ export var NAVIGATION_ITEMS = [
 
 // Event categories
 export var EVENT_CATEGORIES = [
-  { name: 'Concerts', icon: '🎵' },
-  { name: 'Sports', icon: '⚽' },
-  { name: 'Movies', icon: '🎬' },
-  { name: 'Comedy', icon: '😂' },
-  { name: 'Workshops', icon: '📚' },
+  { name: 'Concerts' },
+  { name: 'Sports' },
+  { name: 'Movies' },
+  { name: 'Comedy' },
+  { name: 'Workshops' },
 ];

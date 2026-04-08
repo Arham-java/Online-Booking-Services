@@ -7,21 +7,13 @@ import { generateDummyEvents } from '../dummyEvents';
 /* Verified working Unsplash images per category */
 var CATEGORY_IMAGES = {
   'Concerts':  'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=1800&q=80',
-  'Sports':    'https://images.unsplash.com/photo-1540747913346-19212a4b423a?auto=format&fit=crop&w=1800&q=80',
+  'Sports':    'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=80',
   'Movies':    'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1800&q=80',
   'Comedy':    'https://images.unsplash.com/photo-1541845157-a6d2d100c931?auto=format&fit=crop&w=1800&q=80',
   'Stand-ups': 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1800&q=80',
   'Workshops': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80',
 };
 
-// var CATEGORY_ICONS = {
-//   'Concerts':  '🎵',
-//   'Sports':    '🏏',
-//   'Movies':    '🎬',
-//   'Comedy':    '😂',
-//   'Stand-ups': '🎤',
-//   'Workshops': '📚',
-// };
 
 var CATEGORY_COLORS = {
   'Concerts':  'linear-gradient(135deg, #6366f1, #8b5cf6)',
@@ -65,7 +57,6 @@ function CategoryEvents(props) {
   var [loading, setLoading] = useState(true);
 
   var heroImage = CATEGORY_IMAGES[category] || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1800&q=80';
-  var catIcon = CATEGORY_ICONS[category] || '🎪';
   var catColor = CATEGORY_COLORS[category] || 'linear-gradient(135deg, #6366f1, #8b5cf6)';
 
   useEffect(function() {
@@ -77,7 +68,7 @@ function CategoryEvents(props) {
         setEvents(filterByCategory(combined, category));
       } catch (error) {
         console.log('Failed to fetch events', error);
-        var dummyData = generateDummyEvents();
+        dummyData = generateDummyEvents();
         setEvents(filterByCategory(dummyData, category));
       } finally {
         setLoading(false);
@@ -164,7 +155,7 @@ function CategoryEvents(props) {
             marginBottom: '28px',
             boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
           }}>
-            {catIcon} {category}
+            {category}
           </div>
 
           <h1 className="animate-fade-in-up" style={{
@@ -200,7 +191,7 @@ function CategoryEvents(props) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
-                {catIcon} {category} Events in India
+                {category} Events in India
               </h2>
               <p style={{ color: '#64748b', fontSize: '15px' }}>
                 {loading ? 'Loading...' : events.length + ' events found across India'}
@@ -283,7 +274,7 @@ function CategoryEvents(props) {
                         transition: 'all 0.2s ease',
                       }}
                     >
-                      {CATEGORY_ICONS[cat]} {cat}
+                      {cat}
                     </button>
                   );
                 })}

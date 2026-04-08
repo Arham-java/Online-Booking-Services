@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { EventCard } from '../components/UI/SharedComponents';
+import { EventCard, EventCategoryCard } from '../components/UI/SharedComponents';
 import { EVENT_CATEGORIES } from '../constants';
 import { getEventsCall, bookEventCall } from '../services/api';
 import { generateDummyEvents } from '../dummyEvents';
@@ -59,7 +59,7 @@ var FEATURED_EVENTS_INDIA = [
 /* Category images – verified Unsplash */
 var CATEGORY_IMAGES = {
   'Concerts':  'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=200&fit=crop&auto=format',
-  'Sports':    'https://images.unsplash.com/photo-1540747913346-19212a4b423a?w=300&h=200&fit=crop&auto=format',
+  'Sports':    'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=300&fit=crop&auto=format',
   'Movies':    'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=200&fit=crop&auto=format',
   'Comedy':    'https://images.unsplash.com/photo-1541845157-a6d2d100c931?w=300&h=200&fit=crop&auto=format',
   'Workshops': 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop&auto=format',
@@ -135,10 +135,13 @@ function Explore({ onNavigate }) {
   }
 
   var filteredEvents = events.filter(function(e) {
+    var title = e.title || '';
+    var description = e.description || '';
+    var location = e.location || '';
     return (
-      e.title.toLowerCase().includes(activeSearch.toLowerCase()) ||
-      (e.description && e.description.toLowerCase().includes(activeSearch.toLowerCase())) ||
-      e.location.toLowerCase().includes(activeSearch.toLowerCase())
+      title.toLowerCase().includes(activeSearch.toLowerCase()) ||
+      description.toLowerCase().includes(activeSearch.toLowerCase()) ||
+      location.toLowerCase().includes(activeSearch.toLowerCase())
     );
   });
 
@@ -243,38 +246,12 @@ function Explore({ onNavigate }) {
               {EVENT_CATEGORIES.map(function(category, i) {
                 var catImage = CATEGORY_IMAGES[category.name] || 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=200&fit=crop&auto=format';
                 return (
-                  <div
+                  <EventCategoryCard
                     key={category.name}
-                    className="card-premium animate-fade-in-up"
-                    style={{ overflow: 'hidden', animationDelay: (i * 0.1) + 's', cursor: 'pointer' }}
-                    onClick={() => handleCategoryExplore(category.name)}
-                  >
-                    <div style={{ height: '140px', overflow: 'hidden', position: 'relative' }}>
-                      <SafeImage
-                        src={catImage}
-                        alt={category.name}
-                        className="img-hover-zoom"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                      <div style={{
-                        position: 'absolute', inset: 0,
-                        background: 'linear-gradient(to top, rgba(15,12,41,0.7), rgba(0,0,0,0.15))',
-                      }}>
-                      </div>
-                    </div>
-                    <div style={{ padding: '16px', textAlign: 'center' }}>
-                      <h3 style={{ fontWeight: '700', color: '#1e293b', fontSize: '1rem', marginBottom: '12px' }}>
-                        {category.name}
-                      </h3>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleCategoryExplore(category.name); }}
-                        className="btn-primary"
-                        style={{ width: '100%', padding: '10px', fontSize: '13px', borderRadius: '12px' }}
-                      >
-                        <span>Explore</span>
-                      </button>
-                    </div>
-                  </div>
+                    name={category.name}
+                    image={catImage}
+                    onClick={function() { handleCategoryExplore(category.name); }}
+                  />
                 );
               })}
             </div>
@@ -338,45 +315,46 @@ function Explore({ onNavigate }) {
             </div>
           </section>
 
-          {/* Live Events From DB */}
-          <section id="events-list-section">
-            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <h2 className="section-title">All Events</h2>
-              <div className="divider" />
-              <p className="section-subtitle" style={{ marginTop: '16px' }}>Browse and book tickets for all listed events</p>
-            </div>
+          {/* Search Results (Live Events From DB) */}
+          {activeSearch && (
+            <section id="events-list-section">
+              <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                <h2 className="section-title">Search Results</h2>
+                <div className="divider" />
+              </div>
 
-            {loading ? (
-              <div style={{ textAlign: 'center', padding: '60px 0' }}>
-                <div className="loading-spinner" />
-                <p style={{ color: '#64748b', marginTop: '20px', fontSize: '16px' }}>Loading events...</p>
-              </div>
-            ) : filteredEvents.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '60px', background: 'white', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '64px', marginBottom: '20px' }}>🔍</div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '12px' }}>No results found</h3>
-                <p style={{ color: '#64748b' }}>Try different keywords or clear your search.</p>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
-                {filteredEvents.slice(0, 12).map(function(event) {
-                  return (
-                    <EventCard
-                      key={event._id}
-                      id={event._id}
-                      title={event.title}
-                      image={event.image || 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=500&h=350&fit=crop&auto=format'}
-                      date={event.date}
-                      location={event.location}
-                      price={event.price}
-                      availableSpots={event.availableSpots}
-                      onBook={handleBook}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </section>
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <div className="loading-spinner" />
+                  <p style={{ color: '#64748b', marginTop: '20px', fontSize: '16px' }}>Loading events...</p>
+                </div>
+              ) : filteredEvents.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px', background: 'white', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '64px', marginBottom: '20px' }}>🔍</div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '12px' }}>No results found</h3>
+                  <p style={{ color: '#64748b' }}>Try different keywords or clear your search.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
+                  {filteredEvents.slice(0, 12).map(function(event) {
+                    return (
+                      <EventCard
+                        key={event._id}
+                        id={event._id}
+                        title={event.title}
+                        image={event.image || 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=500&h=350&fit=crop&auto=format'}
+                        date={event.date}
+                        location={event.location}
+                        price={event.price}
+                        availableSpots={event.availableSpots}
+                        onBook={handleBook}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          )}
 
         </div>
       </div>

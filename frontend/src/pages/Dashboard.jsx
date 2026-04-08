@@ -156,8 +156,34 @@ function UserDashboard({ onNavigate, userRole, userData }) {
     fetchMyBookings();
   }, []);
 
+  var upcomingBookings = myBookings.filter(function(b) {
+    return b.event && new Date(b.event.date) >= new Date();
+  });
+  var totalSpent = myBookings.reduce(function(sum, b) {
+    return sum + (b.totalPrice || 0);
+  }, 0);
+
   return (
     <div>
+      {/* User Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>🎫</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#6366f1', fontFamily: 'Poppins, sans-serif' }}>{myBookings.length}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Bookings</div>
+        </div>
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>🌟</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#f97316', fontFamily: 'Poppins, sans-serif' }}>{upcomingBookings.length}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Upcoming Events</div>
+        </div>
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}>💸</div>
+          <div style={{ fontSize: '2rem', fontWeight: '900', color: '#10b981', fontFamily: 'Poppins, sans-serif' }}>₹{totalSpent.toLocaleString('en-IN')}</div>
+          <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Spent</div>
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
 
         {/* Left column */}
@@ -381,17 +407,17 @@ function OrganizerDashboard({ userRole, userData }) {
     <div>
       {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-        <div className="stat-card">
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
           <div style={{ fontSize: '32px', marginBottom: '8px' }}>📅</div>
           <div style={{ fontSize: '2rem', fontWeight: '900', color: '#6366f1', fontFamily: 'Poppins, sans-serif' }}>{events.length}</div>
           <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Events Created</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
           <div style={{ fontSize: '32px', marginBottom: '8px' }}>🎫</div>
           <div style={{ fontSize: '2rem', fontWeight: '900', color: '#8b5cf6', fontFamily: 'Poppins, sans-serif' }}>{bookings.length}</div>
           <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Bookings</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
           <div style={{ fontSize: '32px', marginBottom: '8px' }}>💰</div>
           <div style={{ fontSize: '2rem', fontWeight: '900', color: '#10b981', fontFamily: 'Poppins, sans-serif' }}>₹{totalEarnings.toLocaleString('en-IN')}</div>
           <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>Total Revenue</div>

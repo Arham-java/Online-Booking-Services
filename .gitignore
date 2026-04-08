@@ -50,3 +50,12 @@ backend/seed-output.txt
 # dist/ and build/ (Build Outputs): When you build your React frontend for production (using npm run build), it generates optimized HTML, CSS, and JS files in a dist or build folder. These files are automatically generated, so tracking them only creates unnecessary clutter and conflicts in your Git history.
 # npm-debug.log*, *.log (Logs): Sometimes whenever an application crashes locally, npm creates a log file. These are specific to an error on your machine and are completely useless to anyone else examining your repository online.
 # .DS_Store, .vscode/*, etc. (System & Editor Files): If you use VS Code, or are on a Mac, or use Windows IDEs, they automatically generate hidden files. These are your personal workspace settings and shouldn't be forced onto other developers.
+
+
+
+
+# The reason you see three node_modules folders is because your project is structured into three separate parts, each with its own list of dependencies:
+
+# Root folder (/node_modules): This is for the main project. It mainly contains a tool called concurrently. You use this so that when you run npm run dev at the very start, it can trigger both your frontend and backend at the same time.
+# Backend folder (/backend/node_modules): This contains everything your server needs to run, like Express (for the API), Mongoose (for connecting to MongoDB), and jsonwebtoken (for your login/security).
+# Frontend folder (/frontend/node_modules): This contains everything for your website's interface, like React, Vite, and Tailwind CSS.

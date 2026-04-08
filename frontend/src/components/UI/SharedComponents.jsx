@@ -281,55 +281,36 @@ function EventCard(props) {
 
 /* ===== EVENT CATEGORY CARD ===== */
 function EventCategoryCard(props) {
-  var fallback = 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=200&fit=crop&auto=format';
-
-  function handleExplore() {
-    if (props.onExplore != null) {
-      props.onExplore(props.category);
-    }
-  }
-
-  function handleImgError(e) {
-    e.target.src = fallback;
-  }
+  var catImage = props.image || 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=200&fit=crop&auto=format';
 
   return (
-    <div className="card-premium" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-      {/* Image */}
-      <div style={{ position: 'relative', height: '140px', overflow: 'hidden' }}>
+    <div
+      className="card-premium"
+      style={{ overflow: 'hidden', cursor: 'pointer', transition: 'all 0.3s ease' }}
+      onClick={props.onClick}
+    >
+      <div style={{ height: '140px', overflow: 'hidden', position: 'relative' }}>
         <img
-          src={props.image || fallback}
-          alt={props.category}
-          onError={handleImgError}
+          src={catImage}
+          alt={props.name}
           className="img-hover-zoom"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
-        {/* Icon overlay */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to top, rgba(15,12,41,0.65), rgba(0,0,0,0.1))',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'linear-gradient(to top, rgba(15,12,41,0.7), rgba(0,0,0,0.15))',
         }}>
-          <span style={{ fontSize: '44px', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))' }}>
-            {props.icon}
-          </span>
         </div>
       </div>
-
-      {/* Content */}
-      <div style={{ padding: '18px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h3 style={{ fontWeight: '700', fontSize: '1rem', color: '#1e293b', marginBottom: '8px' }}>
-          {props.category}
+      <div style={{ padding: '16px', textAlign: 'center' }}>
+        <h3 style={{ fontWeight: '700', color: '#1e293b', fontSize: '1rem', marginBottom: '12px' }}>
+          {props.name}
         </h3>
-        <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '16px', flex: 1 }}>
-          {props.description}
-        </p>
         <button
-          onClick={handleExplore}
           className="btn-primary"
-          style={{ padding: '10px', fontSize: '13px', borderRadius: '12px', width: '100%' }}
+          style={{ width: '100%', padding: '10px', fontSize: '13px', borderRadius: '12px' }}
         >
-          <span>Explore →</span>
+          <span>Explore</span>
         </button>
       </div>
     </div>
@@ -425,4 +406,4 @@ function FormInput(props) {
   );
 }
 
-export { FeatureCard, PaymentModal, EventCard, EventCategoryCard, ContactCard, FormInput };
+export { FeatureCard, PaymentModal, EventCard, ContactCard, FormInput, EventCategoryCard };

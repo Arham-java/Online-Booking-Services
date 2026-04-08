@@ -16,7 +16,7 @@ function Signup({ switchToLogin, onSignup }) {
     try {
       var data = await signupCall(formData.name, formData.email, formData.password, role);
       console.log('Signup Success:', data);
-      if (onSignup) onSignup(data.role || role);
+      if (onSignup) onSignup(data);
     } catch (error) {
       console.log('Signup Error:', error.response?.data?.message || error.message);
       alert(error.response?.data?.message || 'Error during signup. Please try again.');
